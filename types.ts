@@ -1,4 +1,14 @@
-export type ModelType = 'Checkpoint' | 'LoRA' | 'VAE' | 'TextEncoder' | 'CLIP';
+export type ModelType = 
+  | 'Checkpoint' 
+  | 'LoRA' 
+  | 'VAE' 
+  | 'TextEncoder' 
+  | 'CLIP' 
+  | 'ControlNet' 
+  | 'IPAdapter' 
+  | 'CLIPVision' 
+  | 'Embedding' 
+  | 'CLIPEmbed';
 
 export interface GenerationSettings {
   steps: number;
@@ -27,6 +37,7 @@ export interface Model {
   description: string;
   thumbnailUrl?: string;
   triggerWords?: string[];
+  tags?: string[]; // Style tags for filtering
   fileLocation?: string;
   
   // Best global settings for this model
@@ -49,6 +60,13 @@ export interface Combination {
   settings: GenerationSettings;
   notes?: string;
   triggerWords?: string[];
+  referenceImageUrl?: string;
+}
+
+export interface User {
+  name: string;
+  email: string;
+  picture: string;
 }
 
 export interface AppState {

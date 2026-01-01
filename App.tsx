@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { ModelCard } from './components/ModelCard';
 import { CombinationBuilder } from './components/CombinationBuilder';
 import { ModelDetail } from './components/ModelDetail';
 import { ImportSettings } from './components/ImportSettings';
 import { loadAppState, saveModel, deleteModel, saveCombination, deleteCombination, saveModels } from './services/storage';
-import { AppState, Model, Combination, ModelType } from './types';
-import { Search, Plus, Loader2 } from 'lucide-react';
+import { AppState, Model, Combination, ModelType, User } from './types';
+import { Search, Plus, Loader2, Hash, X } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -14,7 +14,9 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [selectedModel, setSelectedModel] = useState<Model | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const initData = async () => {
@@ -40,6 +42,16 @@ export default function App() {
     } else {
       document.documentElement.classList.remove('dark');
     }
+
+    // Auth initialization
+    const storedUser = localStorage.getItem('user_session');
+    if (storedUser) {
+        try {
+            setUser(JSON.parse(storedUser));
+        } catch (e) {
+            localStorage.removeItem('user_session');
+        }
+    }
   }, []);
 
   const toggleTheme = () => {
@@ -50,6 +62,32 @@ export default function App() {
         localStorage.setItem('theme', next ? 'dark' : 'light');
         return next;
     });
+  };
+
+  const handleGoogleLogin = (credentialResponse: any) => {
+      try {
+          const base64Url = credentialResponse.credential.split('.')[1];
+          const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          }).join(''));
+          
+          const payload = JSON.parse(jsonPayload);
+          const newUser: User = {
+              name: payload.name,
+              email: payload.email,
+              picture: payload.picture
+          };
+          setUser(newUser);
+          localStorage.setItem('user_session', JSON.stringify(newUser));
+      } catch (e) {
+          console.error("Failed to decode JWT", e);
+      }
+  };
+
+  const handleLogout = () => {
+      setUser(null);
+      localStorage.removeItem('user_session');
   };
 
   const handleUpdateModel = async (updatedModel: Model) => {
@@ -123,14 +161,33 @@ export default function App() {
     await saveModels(importedModels);
   };
 
-  // Filter models based on active tab and search
+  const handleToggleTag = (tag: string) => {
+    setSelectedTags(prev => 
+      prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
+    );
+  };
+
+  // Get unique tags from all models
+  const allTags = useMemo(() => {
+    const tags = new Set<string>();
+    data.models.forEach(m => m.tags?.forEach(t => tags.add(t)));
+    return Array.from(tags).sort();
+  }, [data.models]);
+
+  // Filter models based on active tab, search, and selected tags
   const filteredModels = data.models.filter(m => {
     const matchesSearch = m.name.toLowerCase().includes(searchQuery.toLowerCase());
     if (!matchesSearch) return false;
     
+    // Check tags (AND logic: model must have all selected tags)
+    if (selectedTags.length > 0) {
+      const hasAllTags = selectedTags.every(t => m.tags?.includes(t));
+      if (!hasAllTags) return false;
+    }
+    
     if (activeTab === 'checkpoints') return m.type === 'Checkpoint';
     if (activeTab === 'loras') return m.type === 'LoRA';
-    if (activeTab === 'others') return ['VAE', 'TextEncoder', 'CLIP'].includes(m.type);
+    if (activeTab === 'others') return ['VAE', 'TextEncoder', 'CLIP', 'ControlNet', 'IPAdapter', 'CLIPVision', 'Embedding', 'CLIPEmbed'].includes(m.type);
     return true; // Dashboard shows all? Or maybe summary?
   });
 
@@ -198,25 +255,87 @@ export default function App() {
          <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white capitalize">{activeTab}</h2>
             <div className="flex gap-2">
-              <button 
-                onClick={() => handleAddModel(activeTab === 'checkpoints' ? 'Checkpoint' : activeTab === 'loras' ? 'LoRA' : 'VAE')}
-                className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-              >
-                <Plus size={16} />
-                Add {activeTab === 'others' ? 'Model' : activeTab.slice(0, -1)}
-              </button>
+              {activeTab === 'others' ? (
+                 <div className="flex gap-0 rounded-lg shadow-sm">
+                   <select 
+                     className="bg-indigo-600 text-white pl-3 pr-8 py-2 rounded-l-lg outline-none appearance-none cursor-pointer hover:bg-indigo-500 transition-colors text-sm font-medium border-r border-indigo-400"
+                     onChange={(e) => {
+                       if(e.target.value) handleAddModel(e.target.value as ModelType);
+                       e.target.value = ""; // Reset
+                     }}
+                     defaultValue=""
+                   >
+                      <option value="" disabled>Add Model...</option>
+                      <option value="VAE">VAE</option>
+                      <option value="CLIP">CLIP</option>
+                      <option value="TextEncoder">Text Encoder</option>
+                      <option value="ControlNet">ControlNet</option>
+                      <option value="IPAdapter">IP Adapter</option>
+                      <option value="CLIPVision">CLIP Vision</option>
+                      <option value="Embedding">Embedding</option>
+                      <option value="CLIPEmbed">CLIP Embed</option>
+                   </select>
+                   <div className="bg-indigo-600 text-white px-3 py-2 rounded-r-lg flex items-center pointer-events-none">
+                      <Plus size={16} />
+                   </div>
+                 </div>
+              ) : (
+                <button 
+                  onClick={() => handleAddModel(activeTab === 'checkpoints' ? 'Checkpoint' : 'LoRA')}
+                  className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                >
+                  <Plus size={16} />
+                  Add {activeTab.slice(0, -1)}
+                </button>
+              )}
             </div>
          </div>
 
-         <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={20} />
-            <input 
-              type="text"
-              placeholder={`Search ${activeTab}...`}
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl py-3 pl-10 pr-4 text-slate-900 dark:text-slate-200 focus:outline-none focus:border-indigo-500 shadow-sm dark:shadow-none placeholder-slate-400 dark:placeholder-slate-500"
-            />
+         <div className="space-y-4">
+           {/* Search and Filter */}
+           <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={20} />
+              <input 
+                type="text"
+                placeholder={`Search ${activeTab}...`}
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl py-3 pl-10 pr-4 text-slate-900 dark:text-slate-200 focus:outline-none focus:border-indigo-500 shadow-sm dark:shadow-none placeholder-slate-400 dark:placeholder-slate-500"
+              />
+           </div>
+
+           {/* Tag Filter Bar */}
+           {allTags.length > 0 && (
+             <div className="flex flex-wrap gap-2 items-center">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                   <Hash size={12} /> Tags:
+                </span>
+                {allTags.map(tag => {
+                   const isSelected = selectedTags.includes(tag);
+                   return (
+                     <button
+                       key={tag}
+                       onClick={() => handleToggleTag(tag)}
+                       className={`px-3 py-1 rounded-full text-xs font-medium border transition-all ${
+                         isSelected 
+                           ? 'bg-indigo-600 text-white border-indigo-600' 
+                           : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-700'
+                       }`}
+                     >
+                        {tag}
+                     </button>
+                   );
+                })}
+                {selectedTags.length > 0 && (
+                  <button 
+                    onClick={() => setSelectedTags([])}
+                    className="ml-2 text-xs text-slate-400 hover:text-red-500 flex items-center gap-1"
+                  >
+                     <X size={12} /> Clear Filter
+                  </button>
+                )}
+             </div>
+           )}
          </div>
 
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -234,7 +353,7 @@ export default function App() {
             ))}
             {filteredModels.length === 0 && (
               <div className="col-span-full py-20 text-center text-slate-500">
-                No models found.
+                No models found matching your filters.
               </div>
             )}
          </div>
@@ -249,6 +368,9 @@ export default function App() {
         setActiveTab={setActiveTab} 
         isDarkMode={isDarkMode}
         toggleTheme={toggleTheme}
+        user={user}
+        onLogin={handleGoogleLogin}
+        onLogout={handleLogout}
       />
       
       <main className="flex-1 ml-20 p-8 overflow-y-auto h-screen transition-all duration-300">

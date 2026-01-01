@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Model, PromptEntry, MODEL_FAMILIES } from '../types';
-import { X, Save, Wand2, Image as ImageIcon, Copy, BrainCircuit, ChevronDown, Trash2 } from 'lucide-react';
+import { Model, PromptEntry, MODEL_FAMILIES, ModelType } from '../types';
+import { X, Save, Wand2, Image as ImageIcon, Copy, BrainCircuit, ChevronDown, Trash2, Hash, Plus } from 'lucide-react';
 import { generateDescription, enhancePrompt } from '../services/geminiService';
 
 interface ModelDetailProps {
@@ -14,6 +14,7 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
   const [activeTab, setActiveTab] = useState<'info' | 'prompts' | 'settings'>('info');
   const [editedModel, setEditedModel] = useState<Model>({ ...model });
   const [newPromptText, setNewPromptText] = useState('');
+  const [newTag, setNewTag] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleSaveInfo = () => {
@@ -60,6 +61,21 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
     setNewPromptText('');
   };
 
+  const handleAddTag = () => {
+    if (!newTag.trim()) return;
+    const currentTags = editedModel.tags || [];
+    if (!currentTags.includes(newTag.trim())) {
+      setEditedModel(prev => ({ ...prev, tags: [...currentTags, newTag.trim()] }));
+    }
+    setNewTag('');
+  };
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setEditedModel(prev => ({ ...prev, tags: (prev.tags || []).filter(t => t !== tagToRemove) }));
+  };
+
+  const modelTypes: ModelType[] = ['Checkpoint', 'LoRA', 'VAE', 'TextEncoder', 'CLIP', 'ControlNet', 'IPAdapter', 'CLIPVision', 'Embedding', 'CLIPEmbed'];
+
   return (
     <div 
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/80 backdrop-blur-sm p-4"
@@ -83,8 +99,17 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
              <div className="grid grid-cols-2 gap-3">
                 <div>
                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Type</label>
-                   <div className="px-3 py-2 rounded bg-indigo-100 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-500/30 text-indigo-700 dark:text-indigo-300 text-sm font-mono truncate cursor-default" title={editedModel.type}>
-                      {editedModel.type}
+                   <div className="relative">
+                      <select 
+                        value={editedModel.type}
+                        onChange={e => setEditedModel({...editedModel, type: e.target.value as ModelType})}
+                        className="w-full bg-indigo-100 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-500/30 text-indigo-900 dark:text-indigo-200 text-sm font-semibold rounded px-2 py-2 focus:outline-none appearance-none"
+                      >
+                         {modelTypes.map(t => (
+                           <option key={t} value={t}>{t}</option>
+                         ))}
+                      </select>
+                      <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 text-indigo-500 pointer-events-none" size={14} />
                    </div>
                 </div>
                 <div>
@@ -194,6 +219,40 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
                 </div>
 
                 <div className="w-full h-px bg-slate-200 dark:bg-slate-800 my-2"></div>
+                
+                {/* Style Tags Section */}
+                <div>
+                   <label className="block text-sm font-medium text-slate-500 dark:text-slate-400 mb-2 flex items-center gap-2">
+                     <Hash size={14} /> Style Tags
+                   </label>
+                   <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-3">
+                      <div className="flex flex-wrap gap-2 mb-3">
+                         {(editedModel.tags || []).map(tag => (
+                            <span key={tag} className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300">
+                               #{tag}
+                               <button onClick={() => handleRemoveTag(tag)} className="hover:text-red-500 ml-1"><X size={12} /></button>
+                            </span>
+                         ))}
+                         {(editedModel.tags || []).length === 0 && <span className="text-slate-400 text-sm italic">No tags added yet.</span>}
+                      </div>
+                      <div className="flex gap-2">
+                         <input 
+                           type="text" 
+                           value={newTag}
+                           onChange={e => setNewTag(e.target.value)}
+                           onKeyDown={e => e.key === 'Enter' && handleAddTag()}
+                           placeholder="Add a tag..." 
+                           className="flex-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-indigo-500"
+                         />
+                         <button 
+                           onClick={handleAddTag}
+                           className="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
+                         >
+                           <Plus size={16} /> Add
+                         </button>
+                      </div>
+                   </div>
+                </div>
 
                 <div>
                   <label className="block text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Trigger Words (comma separated)</label>

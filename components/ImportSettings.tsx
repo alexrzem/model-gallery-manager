@@ -27,7 +27,13 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ onImport, existi
       case 'main': return 'Checkpoint';
       case 'lora': return 'LoRA';
       case 'vae': return 'VAE';
-      case 'embedding': return 'TextEncoder';
+      case 'embedding': return 'Embedding';
+      case 'text_encoder': return 'TextEncoder';
+      case 'clip': return 'CLIP';
+      case 'controlnet': return 'ControlNet';
+      case 'ip_adapter': return 'IPAdapter';
+      case 'clip_vision': return 'CLIPVision';
+      case 'clip_embed': return 'CLIPEmbed';
       default: return null;
     }
   };
@@ -263,7 +269,7 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ onImport, existi
 
       <div className="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none transition-colors">
          <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Supported Import Types</h3>
-         <div className="grid grid-cols-2 gap-4 text-sm">
+         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
             <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
                Main Checkpoints
@@ -279,6 +285,26 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ onImport, existi
             <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                <span className="w-2 h-2 rounded-full bg-pink-500"></span>
                Text Encoders
+            </div>
+            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+               <span className="w-2 h-2 rounded-full bg-orange-500"></span>
+               CLIP Models
+            </div>
+            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+               <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+               ControlNet
+            </div>
+            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+               <span className="w-2 h-2 rounded-full bg-cyan-500"></span>
+               IP Adapter
+            </div>
+             <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+               <span className="w-2 h-2 rounded-full bg-yellow-500"></span>
+               Embeddings
+            </div>
+            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+               <span className="w-2 h-2 rounded-full bg-red-500"></span>
+               CLIP Vision
             </div>
          </div>
       </div>

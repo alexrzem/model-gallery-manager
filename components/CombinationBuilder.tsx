@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Model, Combination, GenerationSettings } from '../types';
-import { Plus, Save, Trash2, Sliders, Settings2, X } from 'lucide-react';
+import { Plus, Save, Trash2, Sliders, Settings2, X, Upload, Image as ImageIcon } from 'lucide-react';
 
 interface CombinationBuilderProps {
   models: Model[];
@@ -32,6 +32,7 @@ export const CombinationBuilder: React.FC<CombinationBuilderProps> = ({ models, 
   const [steps, setSteps] = useState(30);
   const [cfgScale, setCfgScale] = useState(7.0);
   const [sampler, setSampler] = useState('Euler a');
+  const [referenceImage, setReferenceImage] = useState<string>('');
 
   const handleClear = () => {
     setEditingId(null);
@@ -47,6 +48,7 @@ export const CombinationBuilder: React.FC<CombinationBuilderProps> = ({ models, 
     setSteps(30);
     setCfgScale(7.0);
     setSampler('Euler a');
+    setReferenceImage('');
   };
 
   const handleSelect = (combo: Combination) => {
@@ -63,6 +65,7 @@ export const CombinationBuilder: React.FC<CombinationBuilderProps> = ({ models, 
     setSteps(combo.settings.steps);
     setCfgScale(combo.settings.cfgScale);
     setSampler(combo.settings.sampler);
+    setReferenceImage(combo.referenceImageUrl || '');
   };
 
   const handleToggleLora = (id: string) => {
@@ -90,6 +93,17 @@ export const CombinationBuilder: React.FC<CombinationBuilderProps> = ({ models, 
     setLoraWeights(prev => ({ ...prev, [id]: numValue }));
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setReferenceImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSave = () => {
     if (!comboName || !selectedCheckpoint) return;
     
@@ -110,7 +124,8 @@ export const CombinationBuilder: React.FC<CombinationBuilderProps> = ({ models, 
         sampler,
         width: 1024,
         height: 1024
-      }
+      },
+      referenceImageUrl: referenceImage || undefined
     };
     onSave(newCombo);
     handleClear();
@@ -134,20 +149,30 @@ export const CombinationBuilder: React.FC<CombinationBuilderProps> = ({ models, 
                 onClick={() => handleSelect(combo)}
                 className={`p-4 rounded-lg border transition-all cursor-pointer group ${isEditing ? 'bg-indigo-50 dark:bg-indigo-900/20 border-indigo-500 shadow-md shadow-indigo-900/20' : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-500 hover:bg-white dark:hover:bg-slate-800/80'}`}
               >
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className={`font-semibold ${isEditing ? 'text-indigo-700 dark:text-indigo-300' : 'text-slate-900 dark:text-slate-100'}`}>{combo.name}</h3>
-                  <button 
-                    onClick={(e) => { 
-                      e.stopPropagation(); 
-                      onDelete(combo.id); 
-                      if (combo.id === editingId) handleClear(); 
-                    }} 
-                    className="text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded"
-                  >
-                    <Trash2 size={16} />
-                  </button>
+                <div className="flex gap-3 mb-2">
+                  {combo.referenceImageUrl && (
+                    <div className="flex-shrink-0 w-12 h-12 rounded overflow-hidden border border-slate-200 dark:border-slate-700">
+                        <img src={combo.referenceImageUrl} alt="Reference" className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-start">
+                        <h3 className={`font-semibold truncate ${isEditing ? 'text-indigo-700 dark:text-indigo-300' : 'text-slate-900 dark:text-slate-100'}`}>{combo.name}</h3>
+                        <button 
+                            onClick={(e) => { 
+                            e.stopPropagation(); 
+                            onDelete(combo.id); 
+                            if (combo.id === editingId) handleClear(); 
+                            }} 
+                            className="text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded ml-1"
+                        >
+                            <Trash2 size={16} />
+                        </button>
+                    </div>
+                    <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">{combo.description}</p>
+                  </div>
                 </div>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mb-3 line-clamp-2">{combo.description}</p>
+
                 <div className="space-y-2 text-xs text-slate-500">
                   <div className="flex items-center gap-2">
                     <span className="bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 px-1.5 py-0.5 rounded">CP</span>
@@ -235,6 +260,35 @@ export const CombinationBuilder: React.FC<CombinationBuilderProps> = ({ models, 
              </div>
           </div>
           
+          <div>
+            <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Reference Image (Visual Goal)</label>
+            <div className="flex items-start gap-4 p-4 bg-slate-50 dark:bg-slate-950/50 rounded-lg border border-slate-200 dark:border-slate-800">
+                <div className="w-24 h-24 flex-shrink-0 bg-slate-100 dark:bg-slate-800 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center relative overflow-hidden group">
+                    {referenceImage ? (
+                        <>
+                            <img src={referenceImage} className="w-full h-full object-cover" alt="Reference" />
+                            <button 
+                                onClick={() => setReferenceImage('')}
+                                className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity"
+                            >
+                                <Trash2 size={16} />
+                            </button>
+                        </>
+                    ) : (
+                        <ImageIcon className="text-slate-400" size={24} />
+                    )}
+                </div>
+                <div className="flex-1">
+                    <label className="cursor-pointer bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg text-sm inline-flex items-center gap-2 transition-colors shadow-sm">
+                        <Upload size={16} />
+                        Upload Image
+                        <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
+                    </label>
+                    <p className="text-xs text-slate-500 mt-2">Upload a reference image to remember the style, composition, or lighting you are aiming for with this combination.</p>
+                </div>
+            </div>
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Trigger Words (Combined)</label>
             <input 

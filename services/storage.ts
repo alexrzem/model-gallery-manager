@@ -24,6 +24,7 @@ const SEED_DATA: AppState = {
       description: 'High quality photorealistic model.',
       thumbnailUrl: 'https://picsum.photos/id/1/400/400',
       triggerWords: [],
+      tags: ['Realistic', 'Photography', 'Cinematic'],
       fileLocation: '/models/sdxl/juggernautXL_v9.safetensors',
       preferredSettings: { steps: 35, cfgScale: 6.0, sampler: 'DPM++ 2M Karras' },
       prompts: [
@@ -45,6 +46,7 @@ const SEED_DATA: AppState = {
       thumbnailUrl: 'https://picsum.photos/id/28/400/400',
       fileLocation: '/models/sd15/dreamshaper_8.safetensors',
       triggerWords: [],
+      tags: ['Artistic', 'Illustration', '2.5D'],
       prompts: []
     },
     {
@@ -56,6 +58,7 @@ const SEED_DATA: AppState = {
       thumbnailUrl: 'https://picsum.photos/id/33/400/400',
       fileLocation: '/models/loras/pixel-art-xl.safetensors',
       triggerWords: ['pixel art', '8-bit'],
+      tags: ['Game Asset', 'Retro', 'Pixel'],
       preferredSettings: { cfgScale: 8.0 },
       prompts: []
     },
@@ -68,6 +71,7 @@ const SEED_DATA: AppState = {
       thumbnailUrl: 'https://picsum.photos/id/45/400/400',
       fileLocation: '/models/loras/glass-sculpture.safetensors',
       triggerWords: ['glass sculpture', 'translucent'],
+      tags: ['Abstract', 'Material', '3D'],
       prompts: []
     },
     {
@@ -77,6 +81,7 @@ const SEED_DATA: AppState = {
       version: 'SDXL',
       description: 'Standard VAE for vivid colors.',
       fileLocation: '/models/vae/sdxl_vae.safetensors',
+      tags: ['Utility', 'Color'],
       prompts: []
     }
   ],
