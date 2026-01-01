@@ -150,43 +150,43 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ onImport, existi
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
-      <div className="bg-slate-900 rounded-xl p-8 border border-slate-800">
+      <div className="bg-white dark:bg-slate-900 rounded-xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none transition-colors">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-3 bg-indigo-900/30 rounded-lg text-indigo-400">
+          <div className="p-3 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg text-indigo-600 dark:text-indigo-400">
             <Database size={24} />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-white">Import from InvokeAI</h2>
-            <p className="text-slate-400 text-sm">Upload your <code>invokeai.db</code> file to import models.</p>
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white">Import from InvokeAI</h2>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">Upload your <code>invokeai.db</code> file to import models.</p>
           </div>
         </div>
 
         {/* Strategy Selection */}
-        <div className="mb-6 bg-slate-950/50 p-4 rounded-lg border border-slate-800">
-           <h3 className="text-sm font-medium text-slate-300 mb-3 flex items-center gap-2">
+        <div className="mb-6 bg-slate-50 dark:bg-slate-950/50 p-4 rounded-lg border border-slate-200 dark:border-slate-800">
+           <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 flex items-center gap-2">
              <ImageIcon size={16} />
              Thumbnail Generation
            </h3>
            <div className="grid grid-cols-3 gap-3">
               <button 
                 onClick={() => setThumbnailStrategy('none')}
-                className={`text-xs p-3 rounded-lg border transition-all flex flex-col items-center gap-2 ${thumbnailStrategy === 'none' ? 'bg-slate-800 border-indigo-500 text-white' : 'bg-slate-900 border-slate-700 text-slate-500 hover:border-slate-600'}`}
+                className={`text-xs p-3 rounded-lg border transition-all flex flex-col items-center gap-2 ${thumbnailStrategy === 'none' ? 'bg-white dark:bg-slate-800 border-indigo-500 text-indigo-700 dark:text-white shadow-sm' : 'bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-500 hover:border-slate-400'}`}
               >
-                 <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center"><FileUp size={16} /></div>
+                 <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center"><FileUp size={16} /></div>
                  None
               </button>
               <button 
                 onClick={() => setThumbnailStrategy('search')}
-                className={`text-xs p-3 rounded-lg border transition-all flex flex-col items-center gap-2 ${thumbnailStrategy === 'search' ? 'bg-indigo-900/20 border-indigo-500 text-indigo-300' : 'bg-slate-900 border-slate-700 text-slate-500 hover:border-slate-600'}`}
+                className={`text-xs p-3 rounded-lg border transition-all flex flex-col items-center gap-2 ${thumbnailStrategy === 'search' ? 'bg-indigo-50 dark:bg-indigo-900/20 border-indigo-500 text-indigo-700 dark:text-indigo-300' : 'bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-500 hover:border-slate-400'}`}
               >
-                 <div className="w-8 h-8 rounded-full bg-indigo-900/40 flex items-center justify-center"><Search size={16} /></div>
+                 <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center"><Search size={16} /></div>
                  Search Google
               </button>
               <button 
                 onClick={() => setThumbnailStrategy('generate')}
-                className={`text-xs p-3 rounded-lg border transition-all flex flex-col items-center gap-2 ${thumbnailStrategy === 'generate' ? 'bg-purple-900/20 border-purple-500 text-purple-300' : 'bg-slate-900 border-slate-700 text-slate-500 hover:border-slate-600'}`}
+                className={`text-xs p-3 rounded-lg border transition-all flex flex-col items-center gap-2 ${thumbnailStrategy === 'generate' ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-500 text-purple-700 dark:text-purple-300' : 'bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-500 hover:border-slate-400'}`}
               >
-                 <div className="w-8 h-8 rounded-full bg-purple-900/40 flex items-center justify-center"><Sparkles size={16} /></div>
+                 <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center"><Sparkles size={16} /></div>
                  Generate AI
               </button>
            </div>
@@ -197,7 +197,7 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ onImport, existi
            )}
         </div>
 
-        <div className="border-2 border-dashed border-slate-700 rounded-xl p-8 text-center hover:border-indigo-500 transition-colors bg-slate-950/50">
+        <div className="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-8 text-center hover:border-indigo-500 dark:hover:border-indigo-500 transition-colors bg-slate-50 dark:bg-slate-950/50">
           <input
             type="file"
             id="db-upload"
@@ -207,7 +207,7 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ onImport, existi
             disabled={status === 'loading' || status === 'processing'}
           />
           <label htmlFor="db-upload" className={`cursor-pointer flex flex-col items-center gap-3 ${status === 'processing' ? 'opacity-50 cursor-not-allowed' : ''}`}>
-            <div className="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-white transition-colors">
+            <div className="w-16 h-16 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-white transition-colors">
               {status === 'loading' || status === 'processing' ? (
                 <div className="animate-spin rounded-full h-8 w-8 border-2 border-indigo-500 border-t-transparent" />
               ) : (
@@ -215,20 +215,20 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ onImport, existi
               )}
             </div>
             <div>
-              <span className="text-indigo-400 font-medium hover:underline">Click to upload</span>
+              <span className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">Click to upload</span>
               <span className="text-slate-500"> or drag and drop</span>
             </div>
-            <p className="text-xs text-slate-600">Supported formats: .db, .sqlite</p>
+            <p className="text-xs text-slate-500 dark:text-slate-600">Supported formats: .db, .sqlite</p>
           </label>
         </div>
 
         {status === 'processing' && (
            <div className="mt-6">
-             <div className="flex justify-between text-xs text-slate-400 mb-1">
+             <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 mb-1">
                <span>Processing...</span>
                <span>{processedCount} / {totalToProcess}</span>
              </div>
-             <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+             <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
                <div 
                  className="h-full bg-indigo-500 transition-all duration-300"
                  style={{ width: `${(processedCount / totalToProcess) * 100}%` }}
@@ -239,11 +239,11 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ onImport, existi
         )}
 
         {status === 'success' && (
-          <div className="mt-6 bg-emerald-900/20 border border-emerald-900/50 rounded-lg p-4 flex items-start gap-3">
-            <CheckCircle2 className="text-emerald-500 shrink-0 mt-0.5" size={20} />
+          <div className="mt-6 bg-emerald-100 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-900/50 rounded-lg p-4 flex items-start gap-3">
+            <CheckCircle2 className="text-emerald-600 dark:text-emerald-500 shrink-0 mt-0.5" size={20} />
             <div>
-              <h3 className="text-emerald-400 font-medium">Import Complete</h3>
-              <p className="text-emerald-500/80 text-sm mt-1">
+              <h3 className="text-emerald-700 dark:text-emerald-400 font-medium">Import Complete</h3>
+              <p className="text-emerald-600 dark:text-emerald-500/80 text-sm mt-1">
                 {message} Added {stats.imported} models. Skipped {stats.skipped} duplicates.
               </p>
             </div>
@@ -251,32 +251,32 @@ export const ImportSettings: React.FC<ImportSettingsProps> = ({ onImport, existi
         )}
 
         {status === 'error' && (
-          <div className="mt-6 bg-red-900/20 border border-red-900/50 rounded-lg p-4 flex items-start gap-3">
-            <AlertCircle className="text-red-500 shrink-0 mt-0.5" size={20} />
+          <div className="mt-6 bg-red-100 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 rounded-lg p-4 flex items-start gap-3">
+            <AlertCircle className="text-red-600 dark:text-red-500 shrink-0 mt-0.5" size={20} />
             <div>
-              <h3 className="text-red-400 font-medium">Import Failed</h3>
-              <p className="text-red-500/80 text-sm mt-1">{message}</p>
+              <h3 className="text-red-700 dark:text-red-400 font-medium">Import Failed</h3>
+              <p className="text-red-600 dark:text-red-500/80 text-sm mt-1">{message}</p>
             </div>
           </div>
         )}
       </div>
 
-      <div className="bg-slate-900 rounded-xl p-6 border border-slate-800">
-         <h3 className="text-lg font-bold text-white mb-4">Supported Import Types</h3>
+      <div className="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none transition-colors">
+         <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Supported Import Types</h3>
          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div className="flex items-center gap-2 text-slate-400">
+            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
                Main Checkpoints
             </div>
-            <div className="flex items-center gap-2 text-slate-400">
+            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                <span className="w-2 h-2 rounded-full bg-purple-500"></span>
                LoRAs / LyCORIS
             </div>
-            <div className="flex items-center gap-2 text-slate-400">
+            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
                VAEs
             </div>
-            <div className="flex items-center gap-2 text-slate-400">
+            <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                <span className="w-2 h-2 rounded-full bg-pink-500"></span>
                Text Encoders
             </div>

@@ -13,9 +13,9 @@ export const ModelCard: React.FC<ModelCardProps> = ({ model, onClick, onEdit, on
   return (
     <div 
       onClick={onClick}
-      className="group relative bg-slate-800 rounded-xl overflow-hidden border border-slate-700 hover:border-indigo-500 transition-all cursor-pointer hover:shadow-xl hover:shadow-indigo-900/20"
+      className="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-500 transition-all cursor-pointer hover:shadow-xl hover:shadow-indigo-900/5 dark:hover:shadow-indigo-900/20 shadow-sm"
     >
-      <div className="aspect-[3/2] bg-slate-700 relative overflow-hidden">
+      <div className="aspect-[3/2] bg-slate-100 dark:bg-slate-700 relative overflow-hidden">
         {model.thumbnailUrl ? (
           <img 
             src={model.thumbnailUrl} 
@@ -23,7 +23,7 @@ export const ModelCard: React.FC<ModelCardProps> = ({ model, onClick, onEdit, on
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-slate-600">
+          <div className="w-full h-full flex items-center justify-center text-slate-400 dark:text-slate-600">
             <Box size={48} />
           </div>
         )}
@@ -35,24 +35,24 @@ export const ModelCard: React.FC<ModelCardProps> = ({ model, onClick, onEdit, on
       <div className="p-4">
         <div className="flex justify-between items-start mb-2">
           <div className="flex-1 min-w-0 pr-2">
-            <h3 className="font-semibold text-lg text-slate-100 truncate" title={model.name}>
+            <h3 className="font-semibold text-lg text-slate-900 dark:text-slate-100 truncate" title={model.name}>
               {model.name}
             </h3>
-            <div className="text-xs text-indigo-400 font-medium uppercase tracking-wider mb-1">
+            <div className="text-xs text-indigo-600 dark:text-indigo-400 font-medium uppercase tracking-wider mb-1">
               {model.type}
             </div>
           </div>
           <div className="flex gap-1 shrink-0">
             <button 
                 onClick={onDelete}
-                className="text-slate-500 hover:text-red-400 p-1 rounded-md hover:bg-slate-700 transition-colors"
+                className="text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                 title="Delete Model"
             >
                 <Trash2 size={18} />
             </button>
             <button 
                 onClick={onEdit}
-                className="text-slate-500 hover:text-white p-1 rounded-md hover:bg-slate-700 transition-colors"
+                className="text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
                 title="Edit Model"
             >
                 <MoreHorizontal size={18} />
@@ -60,11 +60,11 @@ export const ModelCard: React.FC<ModelCardProps> = ({ model, onClick, onEdit, on
           </div>
         </div>
 
-        <p className="text-slate-400 text-sm line-clamp-2 mb-4 min-h-[40px]">
+        <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-4 min-h-[40px]">
           {model.description || "No description provided."}
         </p>
 
-        <div className="flex items-center gap-2 text-xs text-slate-500 border-t border-slate-700 pt-3">
+        <div className="flex items-center gap-2 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-700 pt-3">
           <div className="flex items-center gap-1">
             <Tag size={12} />
             {model.triggerWords && model.triggerWords.length > 0 

@@ -1,6 +1,9 @@
-import { Model, Combination, AppState, ModelType, GenerationSettings } from '../types';
+import { AppState, Model, Combination, GenerationSettings } from '../types';
 
-const STORAGE_KEY = 'neurogallery_data_v1';
+const DB_NAME = 'NeuroGalleryDB';
+const DB_VERSION = 1;
+const STORE_MODELS = 'models';
+const STORE_COMBINATIONS = 'combinations';
 
 const DEFAULT_SETTINGS: GenerationSettings = {
   steps: 30,
@@ -91,22 +94,148 @@ const SEED_DATA: AppState = {
   ]
 };
 
-export const getStoredData = (): AppState => {
-  try {
-    const data = localStorage.getItem(STORAGE_KEY);
-    if (data) {
-      return JSON.parse(data);
-    }
-  } catch (e) {
-    console.error("Failed to load data", e);
-  }
-  return SEED_DATA;
+// Open Database Helper
+const openDB = (): Promise<IDBDatabase> => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+    request.onupgradeneeded = (event) => {
+      const db = (event.target as IDBOpenDBRequest).result;
+      if (!db.objectStoreNames.contains(STORE_MODELS)) {
+        db.createObjectStore(STORE_MODELS, { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains(STORE_COMBINATIONS)) {
+        db.createObjectStore(STORE_COMBINATIONS, { keyPath: 'id' });
+      }
+    };
+
+    request.onsuccess = (event) => {
+      resolve((event.target as IDBOpenDBRequest).result);
+    };
+
+    request.onerror = (event) => {
+      reject((event.target as IDBOpenDBRequest).error);
+    };
+  });
 };
 
-export const saveStoredData = (data: AppState) => {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  } catch (e) {
-    console.error("Failed to save data", e);
+// Generic Transaction Helper
+const performTransaction = <T>(
+  storeName: string,
+  mode: IDBTransactionMode,
+  callback: (store: IDBObjectStore) => IDBRequest<T> | void
+): Promise<T> => {
+  return openDB().then(db => {
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(storeName, mode);
+      const store = transaction.objectStore(storeName);
+      
+      let request;
+      try {
+        request = callback(store);
+      } catch (e) {
+        reject(e);
+        return;
+      }
+
+      transaction.oncomplete = () => {
+        if (request && 'result' in request) {
+            resolve((request as IDBRequest).result);
+        } else {
+            resolve(undefined as T);
+        }
+        db.close();
+      };
+
+      transaction.onerror = () => {
+        reject(transaction.error);
+        db.close();
+      };
+    });
+  });
+};
+
+// Generic GetAll Helper
+const getAllFromStore = <T>(storeName: string): Promise<T[]> => {
+    return performTransaction<T[]>(storeName, 'readonly', (store) => store.getAll());
+};
+
+// Initial Load and Seed
+export const loadAppState = async (): Promise<AppState> => {
+  const db = await openDB();
+  
+  // Check if empty to seed
+  const modelsCount = await new Promise<number>((resolve, reject) => {
+      const tx = db.transaction(STORE_MODELS, 'readonly');
+      const countReq = tx.objectStore(STORE_MODELS).count();
+      countReq.onsuccess = () => resolve(countReq.result);
+      countReq.onerror = () => reject(countReq.error);
+  });
+
+  if (modelsCount === 0) {
+      // Seed Data
+      const tx = db.transaction([STORE_MODELS, STORE_COMBINATIONS], 'readwrite');
+      const modelStore = tx.objectStore(STORE_MODELS);
+      const comboStore = tx.objectStore(STORE_COMBINATIONS);
+
+      SEED_DATA.models.forEach(m => modelStore.add(m));
+      SEED_DATA.combinations.forEach(c => comboStore.add(c));
+
+      return new Promise((resolve, reject) => {
+          tx.oncomplete = () => {
+              db.close();
+              resolve(SEED_DATA);
+          };
+          tx.onerror = () => {
+              db.close();
+              reject(tx.error);
+          }
+      });
   }
+
+  db.close();
+
+  // Load Data
+  const [models, combinations] = await Promise.all([
+      getAllFromStore<Model>(STORE_MODELS),
+      getAllFromStore<Combination>(STORE_COMBINATIONS)
+  ]);
+
+  return { models, combinations };
+};
+
+// CRUD Operations
+export const saveModel = (model: Model): Promise<string> => {
+    return performTransaction(STORE_MODELS, 'readwrite', (store) => store.put(model)) as unknown as Promise<string>;
+};
+
+export const saveModels = async (models: Model[]): Promise<void> => {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction(STORE_MODELS, 'readwrite');
+        const store = tx.objectStore(STORE_MODELS);
+        
+        models.forEach(model => store.put(model));
+        
+        tx.oncomplete = () => {
+            db.close();
+            resolve();
+        };
+        tx.onerror = () => {
+            db.close();
+            reject(tx.error);
+        }
+    });
+}
+
+export const deleteModel = (id: string): Promise<void> => {
+    return performTransaction(STORE_MODELS, 'readwrite', (store) => store.delete(id));
+};
+
+export const saveCombination = (combo: Combination): Promise<string> => {
+    return performTransaction(STORE_COMBINATIONS, 'readwrite', (store) => store.put(combo)) as unknown as Promise<string>;
+};
+
+export const deleteCombination = (id: string): Promise<void> => {
+    return performTransaction(STORE_COMBINATIONS, 'readwrite', (store) => store.delete(id));
 };

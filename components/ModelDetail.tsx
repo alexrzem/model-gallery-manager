@@ -62,17 +62,17 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/80 backdrop-blur-sm p-4"
       onClick={onClose}
     >
       <div 
-        className="bg-slate-900 w-full max-w-5xl h-[90vh] rounded-2xl border border-slate-700 flex overflow-hidden shadow-2xl"
+        className="bg-white dark:bg-slate-900 w-full max-w-5xl h-[90vh] rounded-2xl border border-slate-200 dark:border-slate-700 flex overflow-hidden shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         
         {/* Left Column: Image & Quick Info */}
-        <div className="w-1/3 bg-slate-950 p-6 flex flex-col border-r border-slate-800">
-          <div className="aspect-square rounded-xl overflow-hidden bg-slate-800 mb-6 border border-slate-700 group relative">
+        <div className="w-1/3 bg-slate-50 dark:bg-slate-950 p-6 flex flex-col border-r border-slate-200 dark:border-slate-800">
+          <div className="aspect-square rounded-xl overflow-hidden bg-slate-200 dark:bg-slate-800 mb-6 border border-slate-200 dark:border-slate-700 group relative shadow-inner">
              <img src={editedModel.thumbnailUrl || 'https://via.placeholder.com/400'} className="w-full h-full object-cover" />
              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                 <span className="text-white text-xs px-2 py-1 bg-black/60 rounded border border-white/10 cursor-not-allowed">Change Thumbnail</span>
@@ -83,7 +83,7 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
              <div className="grid grid-cols-2 gap-3">
                 <div>
                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Type</label>
-                   <div className="px-3 py-2 rounded bg-indigo-900/30 border border-indigo-500/30 text-indigo-300 text-sm font-mono truncate cursor-default" title={editedModel.type}>
+                   <div className="px-3 py-2 rounded bg-indigo-100 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-500/30 text-indigo-700 dark:text-indigo-300 text-sm font-mono truncate cursor-default" title={editedModel.type}>
                       {editedModel.type}
                    </div>
                 </div>
@@ -93,12 +93,11 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
                      <select 
                        value={editedModel.version}
                        onChange={e => setEditedModel({...editedModel, version: e.target.value})}
-                       className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-2 pr-6 py-2 text-slate-200 text-sm focus:border-indigo-500 focus:outline-none appearance-none"
+                       className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg pl-2 pr-6 py-2 text-slate-900 dark:text-slate-200 text-sm focus:border-indigo-500 focus:outline-none appearance-none"
                      >
                        {MODEL_FAMILIES.map(f => (
                          <option key={f} value={f}>{f}</option>
                        ))}
-                       {/* Fallback if current version is not in list */}
                        {!MODEL_FAMILIES.includes(editedModel.version as any) && (
                          <option value={editedModel.version}>{editedModel.version}</option>
                        )}
@@ -111,7 +110,7 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
 
           <div className="flex-1"></div>
 
-          <div className="mt-6 pt-6 border-t border-slate-800 space-y-3">
+          <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800 space-y-3">
              <button 
                onClick={handleSaveInfo}
                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 rounded-lg transition-colors flex items-center justify-center gap-2"
@@ -122,7 +121,7 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
              
              <button 
                onClick={onDelete}
-               className="w-full bg-slate-900 border border-red-900/50 hover:bg-red-900/20 text-red-400 font-medium py-2 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
+               className="w-full bg-white dark:bg-slate-900 border border-red-200 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 font-medium py-2 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
              >
                <Trash2 size={16} />
                Delete Model
@@ -131,23 +130,23 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
         </div>
 
         {/* Right Column: Tabs & Content */}
-        <div className="w-2/3 flex flex-col bg-slate-900">
-          <div className="flex items-center justify-between p-4 border-b border-slate-800">
-             <div className="flex gap-1 bg-slate-950 p-1 rounded-lg">
+        <div className="w-2/3 flex flex-col bg-white dark:bg-slate-900">
+          <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800">
+             <div className="flex gap-1 bg-slate-100 dark:bg-slate-950 p-1 rounded-lg">
                 <button 
                   onClick={() => setActiveTab('info')}
-                  className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${activeTab === 'info' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
+                  className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${activeTab === 'info' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
                 >
                   Settings & Triggers
                 </button>
                 <button 
                   onClick={() => setActiveTab('prompts')}
-                  className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${activeTab === 'prompts' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'}`}
+                  className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${activeTab === 'prompts' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
                 >
                   Prompt Gallery
                 </button>
              </div>
-             <button onClick={onClose} className="text-slate-400 hover:text-white p-2 hover:bg-slate-800 rounded-full">
+             <button onClick={onClose} className="text-slate-400 hover:text-slate-900 dark:hover:text-white p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full">
                <X size={24} />
              </button>
           </div>
@@ -164,14 +163,14 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
                         type="text" 
                         value={editedModel.name}
                         onChange={e => setEditedModel({...editedModel, name: e.target.value})}
-                        className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white font-bold text-lg focus:border-indigo-500 focus:outline-none placeholder-slate-600 transition-colors"
+                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-slate-900 dark:text-white font-bold text-lg focus:border-indigo-500 focus:outline-none placeholder-slate-400 dark:placeholder-slate-600 transition-colors"
                         placeholder="Model Name"
                       />
                    </div>
 
                    <div>
                       <label className="block text-xs font-bold text-slate-500 uppercase mb-1">File Location</label>
-                      <div className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-400 text-xs font-mono break-all leading-tight">
+                      <div className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-slate-500 dark:text-slate-400 text-xs font-mono break-all leading-tight">
                         {editedModel.fileLocation || "N/A"}
                       </div>
                    </div>
@@ -179,14 +178,14 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
                    <div>
                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Description</label>
                        <textarea 
-                         className="w-full h-32 bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm text-slate-300 focus:border-indigo-500 focus:outline-none resize-none"
+                         className="w-full h-32 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-3 text-sm text-slate-700 dark:text-slate-300 focus:border-indigo-500 focus:outline-none resize-none transition-colors"
                          value={editedModel.description}
                          onChange={e => setEditedModel({...editedModel, description: e.target.value})}
                        />
                        <button 
                          onClick={handleAiDescription}
                          disabled={isGenerating}
-                         className="mt-2 w-full flex items-center justify-center gap-2 text-xs bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 py-2 rounded-lg transition-colors"
+                         className="mt-2 w-full flex items-center justify-center gap-2 text-xs bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-600/20 dark:hover:bg-indigo-600/30 text-indigo-700 dark:text-indigo-300 py-2 rounded-lg transition-colors"
                        >
                          {isGenerating ? <div className="animate-spin rounded-full h-3 w-3 border-2 border-indigo-500 border-t-transparent"/> : <BrainCircuit size={14} />}
                          Generate Description with AI
@@ -194,22 +193,22 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
                    </div>
                 </div>
 
-                <div className="w-full h-px bg-slate-800 my-2"></div>
+                <div className="w-full h-px bg-slate-200 dark:bg-slate-800 my-2"></div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-2">Trigger Words (comma separated)</label>
+                  <label className="block text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Trigger Words (comma separated)</label>
                   <input 
                     type="text" 
                     value={editedModel.triggerWords?.join(', ') || ''}
                     onChange={e => setEditedModel({...editedModel, triggerWords: e.target.value.split(',').map(s => s.trim()).filter(Boolean)})}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-slate-200 focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2 text-slate-900 dark:text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors"
                     placeholder="e.g. masterpiece, best quality"
                   />
                 </div>
                 
-                <div className="bg-slate-950 rounded-xl p-6 border border-slate-800">
-                   <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                     <Wand2 size={18} className="text-indigo-400" />
+                <div className="bg-slate-50 dark:bg-slate-950 rounded-xl p-6 border border-slate-200 dark:border-slate-800">
+                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                     <Wand2 size={18} className="text-indigo-600 dark:text-indigo-400" />
                      Best Settings
                    </h3>
                    <div className="grid grid-cols-2 gap-4">
@@ -219,7 +218,7 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
                           type="number" 
                           value={editedModel.preferredSettings?.steps || 30}
                           onChange={e => setEditedModel({...editedModel, preferredSettings: {...editedModel.preferredSettings, steps: parseInt(e.target.value)}})}
-                          className="w-full mt-1 bg-slate-900 border border-slate-700 rounded px-3 py-2 text-slate-200"
+                          className="w-full mt-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-slate-900 dark:text-slate-200"
                         />
                       </div>
                       <div>
@@ -228,7 +227,7 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
                           type="number" step="0.5"
                           value={editedModel.preferredSettings?.cfgScale || 7}
                           onChange={e => setEditedModel({...editedModel, preferredSettings: {...editedModel.preferredSettings, cfgScale: parseFloat(e.target.value)}})}
-                          className="w-full mt-1 bg-slate-900 border border-slate-700 rounded px-3 py-2 text-slate-200"
+                          className="w-full mt-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-slate-900 dark:text-slate-200"
                         />
                       </div>
                       <div>
@@ -236,7 +235,7 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
                         <select 
                            value={editedModel.preferredSettings?.sampler || 'Euler a'}
                            onChange={e => setEditedModel({...editedModel, preferredSettings: {...editedModel.preferredSettings, sampler: e.target.value}})}
-                           className="w-full mt-1 bg-slate-900 border border-slate-700 rounded px-3 py-2 text-slate-200"
+                           className="w-full mt-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-slate-900 dark:text-slate-200"
                         >
                            <option>Euler a</option>
                            <option>DPM++ 2M Karras</option>
@@ -252,13 +251,13 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
             {activeTab === 'prompts' && (
               <div className="space-y-6">
                  {/* Prompt Input Area */}
-                 <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <label className="block text-sm font-medium text-slate-400 mb-2">Record a successful prompt</label>
+                 <div className="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+                    <label className="block text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Record a successful prompt</label>
                     <div className="relative">
                       <textarea 
                         value={newPromptText}
                         onChange={e => setNewPromptText(e.target.value)}
-                        className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 h-24 pr-24"
+                        className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-3 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-indigo-500 h-24 pr-24 transition-colors"
                         placeholder="Type prompt here..."
                       />
                       <button 
@@ -272,7 +271,7 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
                     <button 
                        onClick={addPrompt}
                        disabled={!newPromptText}
-                       className="mt-3 w-full bg-slate-800 hover:bg-slate-700 text-white py-2 rounded-lg text-sm font-medium transition-colors"
+                       className="mt-3 w-full bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-900 dark:text-white py-2 rounded-lg text-sm font-medium transition-colors"
                     >
                        Add to Gallery
                     </button>
@@ -281,20 +280,20 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
                  {/* Gallery Grid */}
                  <div className="grid grid-cols-2 gap-4">
                     {editedModel.prompts.map(prompt => (
-                       <div key={prompt.id} className="bg-slate-950 rounded-lg overflow-hidden border border-slate-800 group">
+                       <div key={prompt.id} className="bg-slate-100 dark:bg-slate-950 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 group">
                           <div className="aspect-square relative">
-                             <img src={prompt.imageUrl} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+                             <img src={prompt.imageUrl} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" />
                              <div className="absolute inset-0 flex items-end p-2 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                                 <p className="text-xs text-white line-clamp-2">{prompt.text}</p>
                              </div>
                           </div>
-                          <div className="p-2 flex items-center justify-between bg-slate-900 border-t border-slate-800">
+                          <div className="p-2 flex items-center justify-between bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
                              <div className="text-[10px] text-slate-500 font-mono">
                                 {prompt.settings.width}x{prompt.settings.height} • {prompt.settings.steps}s
                              </div>
                              <button 
                                onClick={() => navigator.clipboard.writeText(prompt.text)}
-                               className="text-slate-400 hover:text-white" title="Copy Prompt"
+                               className="text-slate-400 hover:text-slate-900 dark:hover:text-white" title="Copy Prompt"
                              >
                                 <Copy size={14} />
                              </button>
@@ -302,7 +301,7 @@ export const ModelDetail: React.FC<ModelDetailProps> = ({ model, onClose, onUpda
                        </div>
                     ))}
                     {editedModel.prompts.length === 0 && (
-                       <div className="col-span-2 text-center py-12 text-slate-600 border-2 border-dashed border-slate-800 rounded-xl">
+                       <div className="col-span-2 text-center py-12 text-slate-500 dark:text-slate-600 border-2 border-dashed border-slate-300 dark:border-slate-800 rounded-xl">
                           <ImageIcon size={32} className="mx-auto mb-2 opacity-50" />
                           <p>No prompts recorded yet.</p>
                        </div>
