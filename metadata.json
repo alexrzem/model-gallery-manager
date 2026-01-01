@@ -1,0 +1,5 @@
+{
+  "name": "ModelGallery",
+  "description": "A comprehensive manager for Text-to-Image generation models (Checkpoints, LoRAs, VAEs), managing their best settings, prompt libraries, and optimal combinations.",
+  "requestFramePermissions": []
+}
