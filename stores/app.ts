@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import type { AppState, Model, Combination, User } from '../types';
-import { loadAppState, saveModel, deleteModel as deleteModelFromDb, saveCombination, deleteCombination, saveModels } from '../services/storage';
+import { loadAppState, saveModel, deleteModel as deleteModelFromDb, saveCombination, deleteCombination, saveModels } from './storage';
 
 export const useAppStore = defineStore('app', () => {
   const models = ref<Model[]>([]);
