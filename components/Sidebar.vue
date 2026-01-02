@@ -1,7 +1,7 @@
 <template>
     <div>
         <div
-            class="fixed top-0 left-0 z-50 flex flex-col w-20 h-full transition-all duration-300 ease-in-out bg-white border-r border-neutral-200 shadow-xl group dark:bg-neutral-900 dark:border-neutral-800 hover:w-64 shadow-black/5 dark:shadow-black/50">
+            class="fixed top-0 left-0 z-50 flex flex-col w-20 h-full transition-all duration-300 ease-in-out bg-white border-r shadow-xl border-neutral-200 group dark:bg-neutral-900 dark:border-neutral-800 hover:w-64 shadow-black/5 dark:shadow-black/50">
             <!-- Header -->
             <div
                 class="flex items-center justify-center flex-shrink-0 h-20 mb-2 overflow-hidden transition-all duration-300 border-b border-neutral-200 group-hover:justify-start group-hover:px-6 dark:border-neutral-800/50">
@@ -38,7 +38,7 @@
 
             <!-- Footer / Theme Toggle / User -->
             <div
-                class="flex flex-col items-center flex-shrink-0 gap-2 p-4 overflow-hidden text-neutral-500 border-t border-neutral-200 dark:border-neutral-800 group-hover:items-start whitespace-nowrap">
+                class="flex flex-col items-center flex-shrink-0 gap-2 p-4 overflow-hidden border-t text-neutral-500 border-neutral-200 dark:border-neutral-800 group-hover:items-start whitespace-nowrap">
                 <Button
                     @click="$emit('toggleTheme')"
                     class="flex items-center justify-center w-full p-2 transition-colors rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 group-hover:justify-start"
@@ -81,7 +81,7 @@
 
         <!-- Auth Modal -->
         <div v-if="showAuthModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 dark:bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-            <div class="relative w-full max-w-sm p-8 bg-white border border-neutral-200 shadow-2xl dark:bg-neutral-900 rounded-2xl dark:border-neutral-700">
+            <div class="relative w-full max-w-sm p-8 bg-white border shadow-2xl border-neutral-200 dark:bg-neutral-900 rounded-2xl dark:border-neutral-700">
                 <Button @click="showAuthModal = false" class="absolute text-neutral-400 top-4 right-4 hover:text-neutral-900 dark:hover:text-white">
                     <X :size="20" />
                 </Button>
@@ -109,7 +109,7 @@ import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Button from 'primevue/button';
 import { LayoutDashboard, Database, Layers, Component, Palette, Sparkles, Settings, Sun, Moon, LogIn, LogOut, X } from 'lucide-vue-next';
-import type { User } from '../types';
+import type { User } from '@/types';
 
 const props = defineProps<{
     isDarkMode: boolean;
@@ -117,9 +117,9 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-    'toggleTheme': [];
-    'login': [response: any];
-    'logout': [];
+    toggleTheme: [];
+    login: [response: any];
+    logout: [];
 }>();
 
 const route = useRoute();
