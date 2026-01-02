@@ -378,14 +378,14 @@ const handleFileDrop = (e: DragEvent) => {
 <template>
   <div class="max-w-2xl mx-auto space-y-8">
     <!-- Tab Switcher -->
-    <div class="flex p-1 bg-slate-100 dark:bg-slate-800 rounded-lg w-fit mx-auto mb-6">
+    <div class="flex p-1 mx-auto mb-6 bg-neutral-100 rounded-lg dark:bg-neutral-800 w-fit">
       <button
         @click="activeTab = 'db'"
         :class="[
           'px-6 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-2',
           activeTab === 'db'
-            ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-white shadow-sm'
-            : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+            ? 'bg-white dark:bg-neutral-700 text-blue-600 dark:text-white shadow-sm'
+            : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
         ]"
       >
         <Database :size="16" /> Import Database
@@ -395,30 +395,30 @@ const handleFileDrop = (e: DragEvent) => {
         :class="[
           'px-6 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-2',
           activeTab === 'file'
-            ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-white shadow-sm'
-            : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+            ? 'bg-white dark:bg-neutral-700 text-blue-600 dark:text-white shadow-sm'
+            : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
         ]"
       >
         <FileType :size="16" /> Import Model File
       </button>
     </div>
 
-    <div class="bg-white dark:bg-slate-900 rounded-xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none transition-colors">
+    <div class="p-8 transition-colors bg-white border border-neutral-200 shadow-sm dark:bg-neutral-900 rounded-xl dark:border-neutral-800 dark:shadow-none">
       <!-- DB Import Tab -->
       <template v-if="activeTab === 'db'">
         <div class="flex items-center gap-3 mb-6">
-          <div class="p-3 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg text-indigo-600 dark:text-indigo-400">
+          <div class="p-3 text-blue-600 bg-blue-100 rounded-lg dark:bg-blue-900/30 dark:text-blue-400">
             <Database :size="24" />
           </div>
           <div>
-            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Import from InvokeAI</h2>
-            <p class="text-slate-500 dark:text-slate-400 text-sm">Upload your <code>invokeai.db</code> file to import models.</p>
+            <h2 class="text-xl font-bold text-neutral-900 dark:text-white">Import from InvokeAI</h2>
+            <p class="text-sm text-neutral-500 dark:text-neutral-400">Upload your <code>invokeai.db</code> file to import models.</p>
           </div>
         </div>
 
         <!-- Strategy Selection -->
-        <div class="mb-6 bg-slate-50 dark:bg-slate-950/50 p-4 rounded-lg border border-slate-200 dark:border-slate-800">
-          <h3 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 flex items-center gap-2">
+        <div class="p-4 mb-6 border border-neutral-200 rounded-lg bg-neutral-50 dark:bg-neutral-950/50 dark:border-neutral-800">
+          <h3 class="flex items-center gap-2 mb-3 text-sm font-medium text-neutral-700 dark:text-neutral-300">
             <ImageIcon :size="16" />
             Thumbnail Generation
           </h3>
@@ -428,11 +428,11 @@ const handleFileDrop = (e: DragEvent) => {
               :class="[
                 'text-xs p-3 rounded-lg border transition-all flex flex-col items-center gap-2',
                 thumbnailStrategy === 'none'
-                  ? 'bg-white dark:bg-slate-800 border-indigo-500 text-indigo-700 dark:text-white shadow-sm'
-                  : 'bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-500 hover:border-slate-400'
+                  ? 'bg-white dark:bg-neutral-800 border-blue-500 text-blue-700 dark:text-white shadow-sm'
+                  : 'bg-neutral-100 dark:bg-neutral-900 border-neutral-300 dark:border-neutral-700 text-neutral-500 hover:border-neutral-400'
               ]"
             >
-              <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
+              <div class="flex items-center justify-center w-8 h-8 bg-neutral-200 rounded-full dark:bg-neutral-800">
                 <FileUp :size="16" />
               </div>
               None
@@ -442,11 +442,11 @@ const handleFileDrop = (e: DragEvent) => {
               :class="[
                 'text-xs p-3 rounded-lg border transition-all flex flex-col items-center gap-2',
                 thumbnailStrategy === 'search'
-                  ? 'bg-indigo-50 dark:bg-indigo-900/20 border-indigo-500 text-indigo-700 dark:text-indigo-300'
-                  : 'bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-500 hover:border-slate-400'
+                  ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-500 text-blue-700 dark:text-blue-300'
+                  : 'bg-neutral-100 dark:bg-neutral-900 border-neutral-300 dark:border-neutral-700 text-neutral-500 hover:border-neutral-400'
               ]"
             >
-              <div class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center">
+              <div class="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full dark:bg-blue-900/40">
                 <Search :size="16" />
               </div>
               Search Google
@@ -457,16 +457,16 @@ const handleFileDrop = (e: DragEvent) => {
                 'text-xs p-3 rounded-lg border transition-all flex flex-col items-center gap-2',
                 thumbnailStrategy === 'generate'
                   ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-500 text-purple-700 dark:text-purple-300'
-                  : 'bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-slate-500 hover:border-slate-400'
+                  : 'bg-neutral-100 dark:bg-neutral-900 border-neutral-300 dark:border-neutral-700 text-neutral-500 hover:border-neutral-400'
               ]"
             >
-              <div class="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center">
+              <div class="flex items-center justify-center w-8 h-8 bg-purple-100 rounded-full dark:bg-purple-900/40">
                 <Sparkles :size="16" />
               </div>
               Generate AI
             </button>
           </div>
-          <p v-if="thumbnailStrategy !== 'none'" class="text-[10px] text-slate-500 mt-2 text-center">
+          <p v-if="thumbnailStrategy !== 'none'" class="text-[10px] text-neutral-500 mt-2 text-center">
             Note: This will significantly increase import time as it processes each model individually.
           </p>
         </div>
@@ -477,10 +477,10 @@ const handleFileDrop = (e: DragEvent) => {
           @dragleave="handleDbDragLeave"
           @drop="handleDbDrop"
           :class="[
-            'border-2 border-dashed rounded-xl p-8 text-center transition-colors bg-slate-50 dark:bg-slate-950/50',
+            'border-2 border-dashed rounded-xl p-8 text-center transition-colors bg-neutral-50 dark:bg-neutral-950/50',
             isDraggingDb
-              ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20'
-              : 'border-slate-300 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-500'
+              ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+              : 'border-neutral-300 dark:border-neutral-700 hover:border-blue-500 dark:hover:border-blue-500'
           ]"
         >
           <input
@@ -497,47 +497,47 @@ const handleFileDrop = (e: DragEvent) => {
               status === 'loading' || status === 'processing' ? 'pointer-events-none opacity-50' : ''
             ]"
           >
-            <div class="w-16 h-16 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-white transition-colors">
-              <div v-if="status === 'loading' || status === 'processing'" class="animate-spin rounded-full h-8 w-8 border-2 border-indigo-500 border-t-transparent" />
+            <div class="flex items-center justify-center w-16 h-16 text-neutral-400 transition-colors bg-neutral-200 rounded-full dark:bg-neutral-800 dark:text-neutral-400 group-hover:text-blue-600 dark:group-hover:text-white">
+              <div v-if="status === 'loading' || status === 'processing'" class="w-8 h-8 border-2 border-blue-500 rounded-full animate-spin border-t-transparent" />
               <FileUp v-else :size="32" />
             </div>
             <div>
-              <span class="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">Click to upload</span>
-              <span class="text-slate-500"> or drag and drop</span>
+              <span class="font-medium text-blue-600 dark:text-blue-400 hover:underline">Click to upload</span>
+              <span class="text-neutral-500"> or drag and drop</span>
             </div>
-            <p class="text-xs text-slate-500 dark:text-slate-600">Supported formats: .db, .sqlite</p>
+            <p class="text-xs text-neutral-500 dark:text-neutral-600">Supported formats: .db, .sqlite</p>
           </label>
         </div>
 
         <div v-if="status === 'processing'" class="mt-6">
-          <div class="flex justify-between text-xs text-slate-500 dark:text-slate-400 mb-1">
+          <div class="flex justify-between mb-1 text-xs text-neutral-500 dark:text-neutral-400">
             <span>Processing...</span>
             <span>{{ processedCount }} / {{ totalToProcess }}</span>
           </div>
-          <div class="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+          <div class="w-full h-2 overflow-hidden bg-neutral-200 rounded-full dark:bg-neutral-800">
             <div
-              class="h-full bg-indigo-500 transition-all duration-300"
+              class="h-full transition-all duration-300 bg-blue-500"
               :style="{ width: `${(processedCount / totalToProcess) * 100}%` }"
             />
           </div>
-          <p class="text-xs text-slate-500 mt-2 text-center">{{ message }}</p>
+          <p class="mt-2 text-xs text-center text-neutral-500">{{ message }}</p>
         </div>
 
-        <div v-if="status === 'success'" class="mt-6 bg-emerald-100 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-900/50 rounded-lg p-4 flex items-start gap-3">
+        <div v-if="status === 'success'" class="flex items-start gap-3 p-4 mt-6 border rounded-lg bg-emerald-100 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-900/50">
           <CheckCircle2 class="text-emerald-600 dark:text-emerald-500 shrink-0 mt-0.5" :size="20" />
           <div>
-            <h3 class="text-emerald-700 dark:text-emerald-400 font-medium">Import Complete</h3>
-            <p class="text-emerald-600 dark:text-emerald-500/80 text-sm mt-1">
+            <h3 class="font-medium text-emerald-700 dark:text-emerald-400">Import Complete</h3>
+            <p class="mt-1 text-sm text-emerald-600 dark:text-emerald-500/80">
               {{ message }} Added {{ stats.imported }} models. Skipped {{ stats.skipped }} duplicates.
             </p>
           </div>
         </div>
 
-        <div v-if="status === 'error'" class="mt-6 bg-red-100 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 rounded-lg p-4 flex items-start gap-3">
+        <div v-if="status === 'error'" class="flex items-start gap-3 p-4 mt-6 bg-red-100 border border-red-200 rounded-lg dark:bg-red-900/20 dark:border-red-900/50">
           <AlertCircle class="text-red-600 dark:text-red-500 shrink-0 mt-0.5" :size="20" />
           <div>
-            <h3 class="text-red-700 dark:text-red-400 font-medium">Import Failed</h3>
-            <p class="text-red-600 dark:text-red-500/80 text-sm mt-1">{{ message }}</p>
+            <h3 class="font-medium text-red-700 dark:text-red-400">Import Failed</h3>
+            <p class="mt-1 text-sm text-red-600 dark:text-red-500/80">{{ message }}</p>
           </div>
         </div>
       </template>
@@ -545,12 +545,12 @@ const handleFileDrop = (e: DragEvent) => {
       <!-- File Import Tab -->
       <template v-else>
         <div class="flex items-center gap-3 mb-6">
-          <div class="p-3 bg-pink-100 dark:bg-pink-900/30 rounded-lg text-pink-600 dark:text-pink-400">
+          <div class="p-3 text-pink-600 bg-pink-100 rounded-lg dark:bg-pink-900/30 dark:text-pink-400">
             <Hash :size="24" />
           </div>
           <div>
-            <h2 class="text-xl font-bold text-slate-900 dark:text-white">File Identification & Import</h2>
-            <p class="text-slate-500 dark:text-slate-400 text-sm">Calculate hash and identify models using CivitAI.</p>
+            <h2 class="text-xl font-bold text-neutral-900 dark:text-white">File Identification & Import</h2>
+            <p class="text-sm text-neutral-500 dark:text-neutral-400">Calculate hash and identify models using CivitAI.</p>
           </div>
         </div>
 
@@ -560,10 +560,10 @@ const handleFileDrop = (e: DragEvent) => {
           @dragleave="handleFileDragLeave"
           @drop="handleFileDrop"
           :class="[
-            'border-2 border-dashed rounded-xl p-8 text-center transition-colors bg-slate-50 dark:bg-slate-950/50',
+            'border-2 border-dashed rounded-xl p-8 text-center transition-colors bg-neutral-50 dark:bg-neutral-950/50',
             isDraggingFile
               ? 'border-pink-500 bg-pink-50 dark:bg-pink-900/20'
-              : 'border-slate-300 dark:border-slate-700 hover:border-pink-500 dark:hover:border-pink-500'
+              : 'border-neutral-300 dark:border-neutral-700 hover:border-pink-500 dark:hover:border-pink-500'
           ]"
         >
           <input
@@ -580,28 +580,28 @@ const handleFileDrop = (e: DragEvent) => {
               fileStatus === 'hashing' || fileStatus === 'looking_up' ? 'pointer-events-none opacity-50' : ''
             ]"
           >
-            <div class="w-16 h-16 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-400 group-hover:text-pink-600 dark:group-hover:text-white transition-colors">
-              <Loader2 v-if="fileStatus === 'hashing' || fileStatus === 'looking_up'" class="animate-spin text-pink-500" :size="32" />
+            <div class="flex items-center justify-center w-16 h-16 text-neutral-400 transition-colors bg-neutral-200 rounded-full dark:bg-neutral-800 dark:text-neutral-400 group-hover:text-pink-600 dark:group-hover:text-white">
+              <Loader2 v-if="fileStatus === 'hashing' || fileStatus === 'looking_up'" class="text-pink-500 animate-spin" :size="32" />
               <FileUp v-else :size="32" />
             </div>
             <div>
-              <span class="text-pink-600 dark:text-pink-400 font-medium hover:underline">Select Model File</span>
-              <span class="text-slate-500"> (.safetensors, .ckpt)</span>
+              <span class="font-medium text-pink-600 dark:text-pink-400 hover:underline">Select Model File</span>
+              <span class="text-neutral-500"> (.safetensors, .ckpt)</span>
             </div>
-            <p class="text-xs text-slate-500 dark:text-slate-600">Calculates SHA256 in browser. Max file size depends on browser/RAM.</p>
+            <p class="text-xs text-neutral-500 dark:text-neutral-600">Calculates SHA256 in browser. Max file size depends on browser/RAM.</p>
           </label>
         </div>
 
         <div v-if="fileStatus !== 'idle'" class="mt-6 space-y-4 animate-in fade-in slide-in-from-bottom-2">
           <!-- Hash Display -->
-          <div class="bg-slate-100 dark:bg-slate-800 p-4 rounded-lg flex items-center justify-between">
+          <div class="flex items-center justify-between p-4 bg-neutral-100 rounded-lg dark:bg-neutral-800">
             <div class="flex items-center gap-3 overflow-hidden">
-              <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shrink-0">
-                <Hash :size="14" class="text-slate-600 dark:text-slate-400" />
+              <div class="flex items-center justify-center w-8 h-8 bg-neutral-200 rounded-full dark:bg-neutral-700 shrink-0">
+                <Hash :size="14" class="text-neutral-600 dark:text-neutral-400" />
               </div>
               <div class="flex flex-col min-w-0">
-                <span class="text-xs font-bold text-slate-500 uppercase">SHA256 Hash</span>
-                <code class="text-xs text-slate-700 dark:text-slate-300 truncate font-mono">
+                <span class="text-xs font-bold text-neutral-500 uppercase">SHA256 Hash</span>
+                <code class="font-mono text-xs text-neutral-700 truncate dark:text-neutral-300">
                   {{ fileHash || 'Calculating...' }}
                 </code>
               </div>
@@ -611,7 +611,7 @@ const handleFileDrop = (e: DragEvent) => {
                 :href="`https://civarchive.com/models?hash=${fileHash}`"
                 target="_blank"
                 rel="noreferrer"
-                class="p-2 hover:bg-white dark:hover:bg-slate-600 rounded text-slate-500 hover:text-blue-500"
+                class="p-2 text-neutral-500 rounded hover:bg-white dark:hover:bg-neutral-600 hover:text-blue-500"
                 title="Check CivArchive"
               >
                 <ExternalLink :size="16" />
@@ -620,7 +620,7 @@ const handleFileDrop = (e: DragEvent) => {
                 href="https://github.com/airborne-commando/civitai-mirror-list"
                 target="_blank"
                 rel="noreferrer"
-                class="p-2 hover:bg-white dark:hover:bg-slate-600 rounded text-slate-500 hover:text-green-500"
+                class="p-2 text-neutral-500 rounded hover:bg-white dark:hover:bg-neutral-600 hover:text-green-500"
                 title="Check Mirror List"
               >
                 <Search :size="16" />
@@ -628,41 +628,41 @@ const handleFileDrop = (e: DragEvent) => {
             </div>
           </div>
 
-          <div v-if="fileStatus === 'error'" class="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-lg text-sm flex items-center gap-2">
+          <div v-if="fileStatus === 'error'" class="flex items-center gap-2 p-4 text-sm text-red-600 rounded-lg bg-red-50 dark:bg-red-900/20 dark:text-red-400">
             <AlertCircle :size="16" /> {{ fileError }}
           </div>
 
-          <div v-if="fileStatus === 'ready' && scannedModel" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden flex flex-col md:flex-row shadow-lg">
-            <div class="md:w-1/3 bg-slate-200 dark:bg-slate-900 relative min-h-[200px]">
-              <img v-if="scannedModel.thumbnailUrl" :src="scannedModel.thumbnailUrl" class="w-full h-full object-cover absolute inset-0" />
-              <div v-else class="w-full h-full flex items-center justify-center text-slate-400">
+          <div v-if="fileStatus === 'ready' && scannedModel" class="flex flex-col overflow-hidden bg-white border border-neutral-200 shadow-lg dark:bg-neutral-800 dark:border-neutral-700 rounded-xl md:flex-row">
+            <div class="md:w-1/3 bg-neutral-200 dark:bg-neutral-900 relative min-h-[200px]">
+              <img v-if="scannedModel.thumbnailUrl" :src="scannedModel.thumbnailUrl" class="absolute inset-0 object-cover w-full h-full" />
+              <div v-else class="flex items-center justify-center w-full h-full text-neutral-400">
                 <ImageIcon :size="48" />
               </div>
             </div>
-            <div class="p-6 md:w-2/3 flex flex-col">
+            <div class="flex flex-col p-6 md:w-2/3">
               <div class="flex-1">
-                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">{{ scannedModel.name }}</h3>
-                <div class="flex items-center gap-2 text-sm text-slate-500 mb-4">
-                  <span class="bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded">{{ scannedModel.type }}</span>
+                <h3 class="mb-1 text-xl font-bold text-neutral-900 dark:text-white">{{ scannedModel.name }}</h3>
+                <div class="flex items-center gap-2 mb-4 text-sm text-neutral-500">
+                  <span class="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded">{{ scannedModel.type }}</span>
                   <span>{{ scannedModel.version }}</span>
                 </div>
-                <p class="text-sm text-slate-600 dark:text-slate-300 mb-4 line-clamp-3">
+                <p class="mb-4 text-sm text-neutral-600 dark:text-neutral-300 line-clamp-3">
                   {{ scannedModel.description }}
                 </p>
                 <div class="flex flex-wrap gap-1">
                   <span
                     v-for="tw in scannedModel.triggerWords"
                     :key="tw"
-                    class="text-[10px] bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600"
+                    class="text-[10px] bg-neutral-100 dark:bg-neutral-700 px-2 py-1 rounded text-neutral-600 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-600"
                   >
                     {{ tw }}
                   </span>
                 </div>
               </div>
-              <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-700/50 flex justify-end">
+              <div class="flex justify-end pt-4 mt-6 border-t border-neutral-100 dark:border-neutral-700/50">
                 <button
                   @click="saveScannedModel"
-                  class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors"
+                  class="flex items-center gap-2 px-6 py-2 font-medium text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-500"
                 >
                   <Plus :size="18" /> Add to Library
                 </button>
@@ -673,43 +673,43 @@ const handleFileDrop = (e: DragEvent) => {
       </template>
     </div>
 
-    <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none transition-colors">
-      <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">Supported Import Types</h3>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-        <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400">
-          <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+    <div class="p-6 transition-colors bg-white border border-neutral-200 shadow-sm dark:bg-neutral-900 rounded-xl dark:border-neutral-800 dark:shadow-none">
+      <h3 class="mb-4 text-lg font-bold text-neutral-900 dark:text-white">Supported Import Types</h3>
+      <div class="grid grid-cols-2 gap-4 text-sm md:grid-cols-3">
+        <div class="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+          <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
           Main Checkpoints
         </div>
-        <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400">
-          <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+        <div class="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+          <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
           LoRAs / LyCORIS
         </div>
-        <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+        <div class="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
           VAEs
         </div>
-        <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400">
-          <span class="w-2 h-2 rounded-full bg-pink-500"></span>
+        <div class="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+          <span class="w-2 h-2 bg-pink-500 rounded-full"></span>
           Text Encoders
         </div>
-        <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400">
-          <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+        <div class="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+          <span class="w-2 h-2 bg-orange-500 rounded-full"></span>
           CLIP Models
         </div>
-        <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400">
-          <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+        <div class="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+          <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
           ControlNet
         </div>
-        <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+        <div class="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
           <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
           IP Adapter
         </div>
-        <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400">
-          <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+        <div class="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+          <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
           Embeddings
         </div>
-        <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400">
-          <span class="w-2 h-2 rounded-full bg-red-500"></span>
+        <div class="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
+          <span class="w-2 h-2 bg-red-500 rounded-full"></span>
           CLIP Vision
         </div>
       </div>

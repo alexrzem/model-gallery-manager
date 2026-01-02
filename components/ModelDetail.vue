@@ -1,47 +1,47 @@
 <template>
   <div 
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/80 backdrop-blur-sm p-4"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 dark:bg-black/80 backdrop-blur-sm"
     @click="$emit('close')"
   >
     <div 
-      class="bg-white dark:bg-slate-900 w-full max-w-5xl h-[90vh] rounded-2xl border border-slate-200 dark:border-slate-700 flex overflow-hidden shadow-2xl"
+      class="bg-white dark:bg-neutral-900 w-full max-w-5xl h-[90vh] rounded-2xl border border-neutral-200 dark:border-neutral-700 flex overflow-hidden shadow-2xl"
       @click.stop
     >
       
       <!-- Left Column: Image & Quick Info -->
-      <div class="w-1/3 bg-slate-50 dark:bg-slate-950 p-6 flex flex-col border-r border-slate-200 dark:border-slate-800">
-        <div class="aspect-square rounded-xl overflow-hidden bg-slate-200 dark:bg-slate-800 mb-6 border border-slate-200 dark:border-slate-700 group relative shadow-inner">
-          <img :src="editedModel.thumbnailUrl || 'https://via.placeholder.com/400'" class="w-full h-full object-cover" />
-          <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-            <span class="text-white text-xs px-2 py-1 bg-black/60 rounded border border-white/10 cursor-not-allowed">Change Thumbnail</span>
+      <div class="flex flex-col w-1/3 p-6 border-r border-neutral-200 bg-neutral-50 dark:bg-neutral-950 dark:border-neutral-800">
+        <div class="relative mb-6 overflow-hidden bg-neutral-200 border border-neutral-200 shadow-inner aspect-square rounded-xl dark:bg-neutral-800 dark:border-neutral-700 group">
+          <img :src="editedModel.thumbnailUrl || 'https://via.placeholder.com/400'" class="object-cover w-full h-full" />
+          <div class="absolute inset-0 flex items-center justify-center transition-opacity opacity-0 bg-black/50 group-hover:opacity-100">
+            <span class="px-2 py-1 text-xs text-white border rounded cursor-not-allowed bg-black/60 border-white/10">Change Thumbnail</span>
           </div>
         </div>
         
-        <div class="space-y-4 mb-4">
+        <div class="mb-4 space-y-4">
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Type</label>
+              <label class="block mb-1 text-xs font-bold text-neutral-500 uppercase">Type</label>
               <div class="relative">
                 <select 
                   v-model="editedModel.type"
-                  class="w-full bg-indigo-100 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-500/30 text-indigo-900 dark:text-indigo-200 text-sm font-semibold rounded px-2 py-2 focus:outline-none appearance-none"
+                  class="w-full px-2 py-2 text-sm font-semibold text-blue-900 bg-blue-100 border border-blue-200 rounded appearance-none dark:bg-blue-900/30 dark:border-blue-500/30 dark:text-blue-200 focus:outline-none"
                 >
                   <option v-for="t in modelTypes" :key="t" :value="t">{{ t }}</option>
                 </select>
-                <ChevronDown class="absolute right-2 top-1/2 -translate-y-1/2 text-indigo-500 pointer-events-none" :size="14" />
+                <ChevronDown class="absolute text-blue-500 pointer-events-none right-2 top-1/2 -tranneutral-y-1/2" :size="14" />
               </div>
             </div>
             <div>
-              <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Family</label>
+              <label class="block mb-1 text-xs font-bold text-neutral-500 uppercase">Family</label>
               <div class="relative">
                 <select 
                   v-model="editedModel.version"
-                  class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg pl-2 pr-6 py-2 text-slate-900 dark:text-slate-200 text-sm focus:border-indigo-500 focus:outline-none appearance-none"
+                  class="w-full py-2 pl-2 pr-6 text-sm text-neutral-900 bg-white border border-neutral-300 rounded-lg appearance-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200 focus:border-blue-500 focus:outline-none"
                 >
                   <option v-for="f in modelFamilies" :key="f" :value="f">{{ f }}</option>
                   <option v-if="!modelFamilies.includes(editedModel.version as any)" :value="editedModel.version">{{ editedModel.version }}</option>
                 </select>
-                <ChevronDown class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" :size="14" />
+                <ChevronDown class="absolute text-neutral-500 pointer-events-none right-2 top-1/2 -tranneutral-y-1/2" :size="14" />
               </div>
             </div>
           </div>
@@ -49,10 +49,10 @@
 
         <div class="flex-1"></div>
 
-        <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800 space-y-3">
+        <div class="pt-6 mt-6 space-y-3 border-t border-neutral-200 dark:border-neutral-800">
           <button 
             @click="handleSaveInfo"
-            class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 rounded-lg transition-colors flex items-center justify-center gap-2"
+            class="flex items-center justify-center w-full gap-2 py-2 font-medium text-white transition-colors bg-blue-600 rounded-lg hover:bg-blue-500"
           >
             <Save :size="18" />
             Save Changes
@@ -60,7 +60,7 @@
           
           <button 
             @click="$emit('delete')"
-            class="w-full bg-white dark:bg-slate-900 border border-red-200 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 font-medium py-2 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm"
+            class="flex items-center justify-center w-full gap-2 py-2 text-sm font-medium text-red-600 transition-colors bg-white border border-red-200 rounded-lg dark:bg-neutral-900 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-900/20 dark:text-red-400"
           >
             <Trash2 :size="16" />
             Delete Model
@@ -69,80 +69,80 @@
       </div>
 
       <!-- Right Column: Tabs & Content -->
-      <div class="w-2/3 flex flex-col bg-white dark:bg-slate-900">
-        <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800">
-          <div class="flex gap-1 bg-slate-100 dark:bg-slate-950 p-1 rounded-lg">
+      <div class="flex flex-col w-2/3 bg-white dark:bg-neutral-900">
+        <div class="flex items-center justify-between p-4 border-b border-neutral-200 dark:border-neutral-800">
+          <div class="flex gap-1 p-1 bg-neutral-100 rounded-lg dark:bg-neutral-950">
             <button 
               @click="activeTab = 'info'"
-              :class="['px-4 py-1.5 rounded-md text-sm font-medium transition-colors', activeTab === 'info' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white']"
+              :class="['px-4 py-1.5 rounded-md text-sm font-medium transition-colors', activeTab === 'info' ? 'bg-blue-600 text-white shadow-sm' : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white']"
             >
               Settings & Triggers
             </button>
             <button 
               @click="activeTab = 'prompts'"
-              :class="['px-4 py-1.5 rounded-md text-sm font-medium transition-colors', activeTab === 'prompts' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white']"
+              :class="['px-4 py-1.5 rounded-md text-sm font-medium transition-colors', activeTab === 'prompts' ? 'bg-blue-600 text-white shadow-sm' : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white']"
             >
               Prompt Gallery
             </button>
           </div>
-          <button @click="$emit('close')" class="text-slate-400 hover:text-slate-900 dark:hover:text-white p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full">
+          <button @click="$emit('close')" class="p-2 text-neutral-400 rounded-full hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800">
             <X :size="24" />
           </button>
         </div>
 
-        <div class="flex-1 overflow-y-auto p-6">
+        <div class="flex-1 p-6 overflow-y-auto">
           <div v-if="activeTab === 'info'" class="space-y-6">
             
             <div class="grid grid-cols-1 gap-4">
               <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Model Name</label>
+                <label class="block mb-1 text-xs font-bold text-neutral-500 uppercase">Model Name</label>
                 <input 
                   type="text" 
                   v-model="editedModel.name"
-                  class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-slate-900 dark:text-white font-bold text-lg focus:border-indigo-500 focus:outline-none placeholder-slate-400 dark:placeholder-slate-600 transition-colors"
+                  class="w-full px-3 py-2 text-lg font-bold text-neutral-900 placeholder-neutral-400 transition-colors border border-neutral-200 rounded-lg bg-neutral-50 dark:bg-neutral-950 dark:border-neutral-800 dark:text-white focus:border-blue-500 focus:outline-none dark:placeholder-neutral-600"
                   placeholder="Model Name"
                 />
               </div>
 
               <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">File Location</label>
-                <div class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-slate-500 dark:text-slate-400 text-xs font-mono break-all leading-tight">
+                <label class="block mb-1 text-xs font-bold text-neutral-500 uppercase">File Location</label>
+                <div class="w-full px-3 py-2 font-mono text-xs leading-tight text-neutral-500 break-all border border-neutral-200 rounded-lg bg-neutral-50 dark:bg-neutral-950 dark:border-neutral-800 dark:text-neutral-400">
                   {{ editedModel.fileLocation || "N/A" }}
                 </div>
               </div>
 
               <div>
-                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Description</label>
+                <label class="block mb-1 text-xs font-bold text-neutral-500 uppercase">Description</label>
                 <textarea 
-                  class="w-full h-32 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-3 text-sm text-slate-700 dark:text-slate-300 focus:border-indigo-500 focus:outline-none resize-none transition-colors"
+                  class="w-full h-32 p-3 text-sm text-neutral-700 transition-colors border border-neutral-200 rounded-lg resize-none bg-neutral-50 dark:bg-neutral-950 dark:border-neutral-800 dark:text-neutral-300 focus:border-blue-500 focus:outline-none"
                   v-model="editedModel.description"
                 />
                 <button 
                   @click="handleAiDescription"
                   :disabled="isGenerating"
-                  class="mt-2 w-full flex items-center justify-center gap-2 text-xs bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-600/20 dark:hover:bg-indigo-600/30 text-indigo-700 dark:text-indigo-300 py-2 rounded-lg transition-colors"
+                  class="flex items-center justify-center w-full gap-2 py-2 mt-2 text-xs text-blue-700 transition-colors rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-600/20 dark:hover:bg-blue-600/30 dark:text-blue-300"
                 >
-                  <div v-if="isGenerating" class="animate-spin rounded-full h-3 w-3 border-2 border-indigo-500 border-t-transparent"/>
+                  <div v-if="isGenerating" class="w-3 h-3 border-2 border-blue-500 rounded-full animate-spin border-t-transparent"/>
                   <BrainCircuit v-else :size="14" />
                   Generate Description with AI
                 </button>
               </div>
             </div>
 
-            <div class="w-full h-px bg-slate-200 dark:bg-slate-800 my-2"></div>
+            <div class="w-full h-px my-2 bg-neutral-200 dark:bg-neutral-800"></div>
             
             <!-- Style Tags Section -->
             <div>
-              <label class="block text-sm font-medium text-slate-500 dark:text-slate-400 mb-2 flex items-center gap-2">
+              <label class="flex items-center block gap-2 mb-2 text-sm font-medium text-neutral-500 dark:text-neutral-400">
                 <Hash :size="14" /> Style Tags
               </label>
-              <div class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-3">
+              <div class="p-3 border border-neutral-200 rounded-lg bg-neutral-50 dark:bg-neutral-950 dark:border-neutral-800">
                 <div class="flex flex-wrap gap-2 mb-3">
-                  <span v-for="tag in editedModel.tags || []" :key="tag" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300">
+                  <span v-for="tag in editedModel.tags || []" :key="tag" class="inline-flex items-center gap-1 px-3 py-1 text-sm text-neutral-700 bg-white border border-neutral-200 rounded-full dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-300">
                     #{{ tag }}
-                    <button @click="handleRemoveTag(tag)" class="hover:text-red-500 ml-1"><X :size="12" /></button>
+                    <button @click="handleRemoveTag(tag)" class="ml-1 hover:text-red-500"><X :size="12" /></button>
                   </span>
-                  <span v-if="!(editedModel.tags || []).length" class="text-slate-400 text-sm italic">No tags added yet.</span>
+                  <span v-if="!(editedModel.tags || []).length" class="text-sm italic text-neutral-400">No tags added yet.</span>
                 </div>
                 <div class="flex gap-2">
                   <input 
@@ -150,11 +150,11 @@
                     v-model="newTag"
                     @keydown.enter="handleAddTag"
                     placeholder="Add a tag..." 
-                    class="flex-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-indigo-500"
+                    class="flex-1 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500"
                   />
                   <button 
                     @click="handleAddTag"
-                    class="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
+                    class="bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1"
                   >
                     <Plus :size="16" /> Add
                   </button>
@@ -163,46 +163,46 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Trigger Words (comma separated)</label>
+              <label class="block mb-2 text-sm font-medium text-neutral-500 dark:text-neutral-400">Trigger Words (comma separated)</label>
               <input 
                 type="text" 
                 :value="editedModel.triggerWords?.join(', ') || ''"
                 @input="editedModel.triggerWords = ($event.target as HTMLInputElement).value.split(',').map(s => s.trim()).filter(Boolean)"
-                class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2 text-slate-900 dark:text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors"
+                class="w-full px-4 py-2 text-neutral-900 transition-colors border border-neutral-200 rounded-lg bg-neutral-50 dark:bg-neutral-950 dark:border-neutral-800 dark:text-neutral-200 focus:outline-none focus:border-blue-500"
                 placeholder="e.g. masterpiece, best quality"
               />
             </div>
             
-            <div class="bg-slate-50 dark:bg-slate-950 rounded-xl p-6 border border-slate-200 dark:border-slate-800">
-              <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                <Wand2 :size="18" class="text-indigo-600 dark:text-indigo-400" />
+            <div class="p-6 border border-neutral-200 bg-neutral-50 dark:bg-neutral-950 rounded-xl dark:border-neutral-800">
+              <h3 class="flex items-center gap-2 mb-4 text-lg font-semibold text-neutral-900 dark:text-white">
+                <Wand2 :size="18" class="text-blue-600 dark:text-blue-400" />
                 Best Settings
               </h3>
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <label class="text-xs text-slate-500 uppercase font-bold tracking-wider">Steps</label>
+                  <label class="text-xs font-bold tracking-wider text-neutral-500 uppercase">Steps</label>
                   <input 
                     type="number" 
                     :value="editedModel.preferredSettings?.steps || 30"
                     @input="editedModel.preferredSettings = {...editedModel.preferredSettings, steps: parseInt(($event.target as HTMLInputElement).value)}"
-                    class="w-full mt-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-slate-900 dark:text-slate-200"
+                    class="w-full px-3 py-2 mt-1 text-neutral-900 bg-white border border-neutral-300 rounded dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
                   />
                 </div>
                 <div>
-                  <label class="text-xs text-slate-500 uppercase font-bold tracking-wider">CFG Scale</label>
+                  <label class="text-xs font-bold tracking-wider text-neutral-500 uppercase">CFG Scale</label>
                   <input 
                     type="number" step="0.5"
                     :value="editedModel.preferredSettings?.cfgScale || 7"
                     @input="editedModel.preferredSettings = {...editedModel.preferredSettings, cfgScale: parseFloat(($event.target as HTMLInputElement).value)}"
-                    class="w-full mt-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-slate-900 dark:text-slate-200"
+                    class="w-full px-3 py-2 mt-1 text-neutral-900 bg-white border border-neutral-300 rounded dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
                   />
                 </div>
                 <div>
-                  <label class="text-xs text-slate-500 uppercase font-bold tracking-wider">Sampler</label>
+                  <label class="text-xs font-bold tracking-wider text-neutral-500 uppercase">Sampler</label>
                   <select 
                     :value="editedModel.preferredSettings?.sampler || 'Euler a'"
                     @change="editedModel.preferredSettings = {...editedModel.preferredSettings, sampler: ($event.target as HTMLSelectElement).value}"
-                    class="w-full mt-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-3 py-2 text-slate-900 dark:text-slate-200"
+                    class="w-full px-3 py-2 mt-1 text-neutral-900 bg-white border border-neutral-300 rounded dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200"
                   >
                     <option>Euler a</option>
                     <option>DPM++ 2M Karras</option>
@@ -215,18 +215,18 @@
           </div>
 
           <div v-else-if="activeTab === 'prompts'" class="space-y-6">
-            <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
-              <label class="block text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Record a successful prompt</label>
+            <div class="p-4 border border-neutral-200 bg-neutral-50 dark:bg-neutral-950 rounded-xl dark:border-neutral-800">
+              <label class="block mb-2 text-sm font-medium text-neutral-500 dark:text-neutral-400">Record a successful prompt</label>
               <div class="relative">
                 <textarea 
                   v-model="newPromptText"
-                  class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg p-3 text-sm text-slate-900 dark:text-slate-200 focus:outline-none focus:border-indigo-500 h-24 pr-24 transition-colors"
+                  class="w-full h-24 p-3 pr-24 text-sm text-neutral-900 transition-colors bg-white border border-neutral-300 rounded-lg dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-200 focus:outline-none focus:border-blue-500"
                   placeholder="Type prompt here..."
                 />
                 <button 
                   @click="handleAiEnhancePrompt"
                   :disabled="isGenerating || !newPromptText"
-                  class="absolute bottom-2 right-2 text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-md hover:bg-indigo-500 disabled:opacity-50 flex items-center gap-1"
+                  class="absolute bottom-2 right-2 text-xs bg-blue-600 text-white px-3 py-1.5 rounded-md hover:bg-blue-500 disabled:opacity-50 flex items-center gap-1"
                 >
                   <SparkleIcon v-if="!isGenerating" />
                   <span v-else>...</span>
@@ -236,33 +236,33 @@
               <button 
                 @click="addPrompt"
                 :disabled="!newPromptText"
-                class="mt-3 w-full bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-900 dark:text-white py-2 rounded-lg text-sm font-medium transition-colors"
+                class="w-full py-2 mt-3 text-sm font-medium text-neutral-900 transition-colors bg-neutral-200 rounded-lg dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 dark:text-white"
               >
                 Add to Gallery
               </button>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
-              <div v-for="prompt in editedModel.prompts" :key="prompt.id" class="bg-slate-100 dark:bg-slate-950 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 group">
-                <div class="aspect-square relative">
-                  <img :src="prompt.imageUrl" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" />
-                  <div class="absolute inset-0 flex items-end p-2 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+              <div v-for="prompt in editedModel.prompts" :key="prompt.id" class="overflow-hidden bg-neutral-100 border border-neutral-200 rounded-lg dark:bg-neutral-950 dark:border-neutral-800 group">
+                <div class="relative aspect-square">
+                  <img :src="prompt.imageUrl" class="object-cover w-full h-full transition-opacity opacity-90 group-hover:opacity-100" />
+                  <div class="absolute inset-0 flex items-end p-2 transition-opacity opacity-0 bg-gradient-to-t from-black/80 to-transparent group-hover:opacity-100">
                     <p class="text-xs text-white line-clamp-2">{{ prompt.text }}</p>
                   </div>
                 </div>
-                <div class="p-2 flex items-center justify-between bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
-                  <div class="text-[10px] text-slate-500 font-mono">
+                <div class="flex items-center justify-between p-2 bg-white border-t border-neutral-200 dark:bg-neutral-900 dark:border-neutral-800">
+                  <div class="text-[10px] text-neutral-500 font-mono">
                     {{ prompt.settings.width }}x{{ prompt.settings.height }} • {{ prompt.settings.steps }}s
                   </div>
                   <button 
                     @click="copyToClipboard(prompt.text)"
-                    class="text-slate-400 hover:text-slate-900 dark:hover:text-white" title="Copy Prompt"
+                    class="text-neutral-400 hover:text-neutral-900 dark:hover:text-white" title="Copy Prompt"
                   >
                     <Copy :size="14" />
                   </button>
                 </div>
               </div>
-              <div v-if="!editedModel.prompts.length" class="col-span-2 text-center py-12 text-slate-500 dark:text-slate-600 border-2 border-dashed border-slate-300 dark:border-slate-800 rounded-xl">
+              <div v-if="!editedModel.prompts.length" class="col-span-2 py-12 text-center text-neutral-500 border-2 border-neutral-300 border-dashed dark:text-neutral-600 dark:border-neutral-800 rounded-xl">
                 <ImageIcon :size="32" class="mx-auto mb-2 opacity-50" />
                 <p>No prompts recorded yet.</p>
               </div>

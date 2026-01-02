@@ -1,44 +1,44 @@
 <template>
   <div 
     @click="$emit('click')"
-    class="group relative bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-500 transition-all cursor-pointer hover:shadow-xl hover:shadow-indigo-900/5 dark:hover:shadow-indigo-900/20 shadow-sm"
+    class="relative overflow-hidden transition-all bg-white border border-neutral-200 shadow-sm cursor-pointer group dark:bg-neutral-800 rounded-xl dark:border-neutral-700 hover:border-blue-500 dark:hover:border-blue-500 hover:shadow-xl hover:shadow-blue-900/5 dark:hover:shadow-blue-900/20"
   >
-    <div class="aspect-[3/2] bg-slate-100 dark:bg-slate-700 relative overflow-hidden">
+    <div class="aspect-[3/2] bg-neutral-100 dark:bg-neutral-700 relative overflow-hidden">
       <img 
         v-if="model.thumbnailUrl"
         :src="model.thumbnailUrl" 
         :alt="model.name" 
-        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+        class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105" 
       />
-      <div v-else class="w-full h-full flex items-center justify-center text-slate-400 dark:text-slate-600">
+      <div v-else class="flex items-center justify-center w-full h-full text-neutral-400 dark:text-neutral-600">
         <Box :size="48" />
       </div>
-      <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-sm text-xs font-mono px-2 py-1 rounded text-white border border-white/10">
+      <div class="absolute px-2 py-1 font-mono text-xs text-white border rounded top-2 right-2 bg-black/60 backdrop-blur-sm border-white/10">
         {{ model.version }}
       </div>
     </div>
 
     <div class="p-4">
-      <div class="flex justify-between items-start mb-2">
+      <div class="flex items-start justify-between mb-2">
         <div class="flex-1 min-w-0 pr-2">
-          <h3 class="font-semibold text-lg text-slate-900 dark:text-slate-100 truncate" :title="model.name">
+          <h3 class="text-lg font-semibold text-neutral-900 truncate dark:text-neutral-100" :title="model.name">
             {{ model.name }}
           </h3>
-          <div class="text-xs text-indigo-600 dark:text-indigo-400 font-medium uppercase tracking-wider mb-1">
+          <div class="mb-1 text-xs font-medium tracking-wider text-blue-600 uppercase dark:text-blue-400">
             {{ model.type }}
           </div>
         </div>
         <div class="flex gap-1 shrink-0">
           <button 
             @click.stop="$emit('delete', $event)"
-            class="text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+            class="p-1 text-neutral-400 transition-colors rounded-md dark:text-neutral-500 hover:text-red-500 dark:hover:text-red-400 hover:bg-neutral-100 dark:hover:bg-neutral-700"
             title="Delete Model"
           >
             <Trash2 :size="18" />
           </button>
           <button 
             @click.stop="$emit('edit', $event)"
-            class="text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+            class="p-1 text-neutral-400 transition-colors rounded-md dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-700"
             title="Edit Model"
           >
             <MoreHorizontal :size="18" />
@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-3 min-h-[40px]">
+      <p class="text-neutral-600 dark:text-neutral-400 text-sm line-clamp-2 mb-3 min-h-[40px]">
         {{ model.description || "No description provided." }}
       </p>
       
@@ -54,19 +54,19 @@
         <span 
           v-for="(tag, i) in model.tags?.slice(0, 3)" 
           :key="i" 
-          class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-[10px] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 flex items-center gap-1"
+          class="px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-700 text-[10px] text-neutral-600 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-600 flex items-center gap-1"
         >
           <Hash :size="8" /> {{ tag }}
         </span>
         <span 
           v-if="model.tags && model.tags.length > 3" 
-          class="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-700 text-[10px] text-slate-500 dark:text-slate-400"
+          class="px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-700 text-[10px] text-neutral-500 dark:text-neutral-400"
         >
           +{{ model.tags.length - 3 }}
         </span>
       </div>
 
-      <div class="flex items-center gap-2 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-700 pt-3">
+      <div class="flex items-center gap-2 pt-3 text-xs text-neutral-500 border-t border-neutral-100 dark:border-neutral-700">
         <div class="flex items-center gap-1">
           <Tag :size="12" />
           <span v-if="model.triggerWords && model.triggerWords.length > 0">
@@ -74,7 +74,7 @@
           </span>
           <span v-else>No triggers</span>
         </div>
-        <div class="ml-auto flex items-center gap-1">
+        <div class="flex items-center gap-1 ml-auto">
           <Star :size="12" class="text-yellow-500" />
           <span>{{ model.prompts.length }} Prompts</span>
         </div>
