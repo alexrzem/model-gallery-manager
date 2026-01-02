@@ -1,9 +1,9 @@
 <template>
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
+  <div class="grid h-full grid-cols-1 gap-6 lg:grid-cols-3">
     <!-- List of Existing Combinations -->
-    <div class="lg:col-span-1 bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800 overflow-y-auto shadow-sm dark:shadow-none">
-      <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-slate-900 dark:text-white">
-        <Save :size="20" class="text-indigo-600 dark:text-indigo-500" />
+    <div class="p-6 overflow-y-auto bg-white border border-neutral-200 shadow-sm lg:col-span-1 dark:bg-neutral-900 rounded-xl dark:border-neutral-800 dark:shadow-none">
+      <h2 class="flex items-center gap-2 mb-4 text-xl font-bold text-neutral-900 dark:text-white">
+        <Save :size="20" class="text-blue-600 dark:text-blue-500" />
         Saved Recipes
       </h2>
       <div class="space-y-4">
@@ -14,31 +14,31 @@
           :class="[
             'p-4 rounded-lg border transition-all cursor-pointer group',
             editingId === combo.id 
-              ? 'bg-indigo-50 dark:bg-indigo-900/20 border-indigo-500 shadow-md shadow-indigo-900/20' 
-              : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-500 hover:bg-white dark:hover:bg-slate-800/80'
+              ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-500 shadow-md shadow-blue-900/20' 
+              : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 hover:border-blue-500 dark:hover:border-blue-500 hover:bg-white dark:hover:bg-neutral-800/80'
           ]"
         >
           <div class="flex gap-3 mb-2">
-            <div v-if="combo.referenceImageUrl" class="flex-shrink-0 w-12 h-12 rounded overflow-hidden border border-slate-200 dark:border-slate-700">
-              <img :src="combo.referenceImageUrl" alt="Reference" class="w-full h-full object-cover" />
+            <div v-if="combo.referenceImageUrl" class="flex-shrink-0 w-12 h-12 overflow-hidden border border-neutral-200 rounded dark:border-neutral-700">
+              <img :src="combo.referenceImageUrl" alt="Reference" class="object-cover w-full h-full" />
             </div>
             <div class="flex-1 min-w-0">
-              <div class="flex justify-between items-start">
-                <h3 :class="['font-semibold truncate', editingId === combo.id ? 'text-indigo-700 dark:text-indigo-300' : 'text-slate-900 dark:text-slate-100']">{{ combo.name }}</h3>
+              <div class="flex items-start justify-between">
+                <h3 :class="['font-semibold truncate', editingId === combo.id ? 'text-blue-700 dark:text-blue-300' : 'text-neutral-900 dark:text-neutral-100']">{{ combo.name }}</h3>
                 <button 
                   @click.stop="handleDeleteCombo(combo.id)" 
-                  class="text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded ml-1"
+                  class="p-1 ml-1 text-neutral-400 transition-opacity rounded opacity-0 dark:text-neutral-500 hover:text-red-500 dark:hover:text-red-400 group-hover:opacity-100 hover:bg-neutral-200 dark:hover:bg-neutral-700"
                 >
                   <Trash2 :size="16" />
                 </button>
               </div>
-              <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">{{ combo.description }}</p>
+              <p class="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">{{ combo.description }}</p>
             </div>
           </div>
 
-          <div class="space-y-2 text-xs text-slate-500">
+          <div class="space-y-2 text-xs text-neutral-500">
             <div class="flex items-center gap-2">
-              <span class="bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 px-1.5 py-0.5 rounded">CP</span>
+              <span class="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded">CP</span>
               {{ getModelName(combo.checkpointId) || 'Unknown' }}
             </div>
             <div v-if="combo.loraIds.length > 0" class="flex items-center gap-2">
@@ -50,33 +50,33 @@
               <span v-if="combo.clipId" class="bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 px-1.5 py-0.5 rounded border border-pink-200 dark:border-pink-900/50">CLIP</span>
               <span v-if="combo.textEncoderId" class="bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 px-1.5 py-0.5 rounded border border-orange-200 dark:border-orange-900/50">TE</span>
             </div>
-            <div class="flex items-center gap-2 pt-2 border-t border-slate-200 dark:border-slate-700/50">
-              <span class="text-slate-400">{{ combo.settings.steps }} steps</span>
+            <div class="flex items-center gap-2 pt-2 border-t border-neutral-200 dark:border-neutral-700/50">
+              <span class="text-neutral-400">{{ combo.settings.steps }} steps</span>
               <span>•</span>
-              <span class="text-slate-400">CFG {{ combo.settings.cfgScale }}</span>
+              <span class="text-neutral-400">CFG {{ combo.settings.cfgScale }}</span>
               <span>•</span>
-              <span class="text-slate-400">{{ combo.settings.sampler }}</span>
+              <span class="text-neutral-400">{{ combo.settings.sampler }}</span>
             </div>
             <div v-if="combo.triggerWords && combo.triggerWords.length > 0" class="flex flex-wrap gap-1 mt-1">
-              <span v-for="(tw, i) in combo.triggerWords" :key="i" class="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-700 rounded text-[10px] text-slate-600 dark:text-slate-300">{{ tw }}</span>
+              <span v-for="(tw, i) in combo.triggerWords" :key="i" class="px-1.5 py-0.5 bg-neutral-200 dark:bg-neutral-700 rounded text-[10px] text-neutral-600 dark:text-neutral-300">{{ tw }}</span>
             </div>
           </div>
         </div>
-        <div v-if="!combinations.length" class="text-slate-500 dark:text-slate-600 text-center py-8">No recipes saved yet.</div>
+        <div v-if="!combinations.length" class="py-8 text-center text-neutral-500 dark:text-neutral-600">No recipes saved yet.</div>
       </div>
     </div>
 
     <!-- Builder Form -->
-    <div class="lg:col-span-2 bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800 overflow-y-auto shadow-sm dark:shadow-none">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-bold flex items-center gap-2 text-slate-900 dark:text-slate-100">
-          <Sliders :size="20" class="text-indigo-600 dark:text-indigo-500" />
+    <div class="p-6 overflow-y-auto bg-white border border-neutral-200 shadow-sm lg:col-span-2 dark:bg-neutral-900 rounded-xl dark:border-neutral-800 dark:shadow-none">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="flex items-center gap-2 text-xl font-bold text-neutral-900 dark:text-neutral-100">
+          <Sliders :size="20" class="text-blue-600 dark:text-blue-500" />
           {{ editingId ? 'Edit Recipe' : 'Create New Recipe' }}
         </h2>
         <button 
           v-if="editingId"
           @click="handleClear" 
-          class="text-sm bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-1.5 rounded-lg flex items-center gap-2 transition-colors border border-slate-200 dark:border-slate-700"
+          class="text-sm bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-600 dark:text-neutral-300 px-3 py-1.5 rounded-lg flex items-center gap-2 transition-colors border border-neutral-200 dark:border-neutral-700"
         >
           <X :size="14" /> Cancel Edit
         </button>
@@ -85,66 +85,66 @@
       <div class="space-y-6">
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Recipe Name</label>
+            <label class="block mb-1 text-sm font-medium text-neutral-600 dark:text-neutral-400">Recipe Name</label>
             <input 
               type="text" 
               v-model="comboName"
-              class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors placeholder-slate-400 dark:placeholder-slate-600"
+              class="w-full px-4 py-2 text-neutral-900 placeholder-neutral-400 transition-colors border border-neutral-200 rounded-lg bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-100 focus:outline-none focus:border-blue-500 dark:placeholder-neutral-600"
               placeholder="e.g. Cinematic Sci-Fi"
             />
           </div>
           <div>
-            <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Description</label>
+            <label class="block mb-1 text-sm font-medium text-neutral-600 dark:text-neutral-400">Description</label>
             <input 
               type="text" 
               v-model="description"
-              class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors placeholder-slate-400 dark:placeholder-slate-600"
+              class="w-full px-4 py-2 text-neutral-900 placeholder-neutral-400 transition-colors border border-neutral-200 rounded-lg bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-100 focus:outline-none focus:border-blue-500 dark:placeholder-neutral-600"
               placeholder="Brief notes..."
             />
           </div>
         </div>
         
         <div>
-          <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Reference Image (Visual Goal)</label>
-          <div class="flex items-start gap-4 p-4 bg-slate-50 dark:bg-slate-950/50 rounded-lg border border-slate-200 dark:border-slate-800">
-            <div class="w-24 h-24 flex-shrink-0 bg-slate-100 dark:bg-slate-800 rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center relative overflow-hidden group">
+          <label class="block mb-2 text-sm font-medium text-neutral-600 dark:text-neutral-400">Reference Image (Visual Goal)</label>
+          <div class="flex items-start gap-4 p-4 border border-neutral-200 rounded-lg bg-neutral-50 dark:bg-neutral-950/50 dark:border-neutral-800">
+            <div class="relative flex items-center justify-center flex-shrink-0 w-24 h-24 overflow-hidden bg-neutral-100 border-2 border-neutral-300 border-dashed rounded-lg dark:bg-neutral-800 dark:border-neutral-700 group">
               <template v-if="referenceImage">
-                <img :src="referenceImage" class="w-full h-full object-cover" alt="Reference" />
+                <img :src="referenceImage" class="object-cover w-full h-full" alt="Reference" />
                 <button 
                   @click="referenceImage = ''"
-                  class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity"
+                  class="absolute inset-0 flex items-center justify-center text-white transition-opacity opacity-0 bg-black/50 group-hover:opacity-100"
                 >
                   <Trash2 :size="16" />
                 </button>
               </template>
-              <ImageIcon v-else class="text-slate-400" :size="24" />
+              <ImageIcon v-else class="text-neutral-400" :size="24" />
             </div>
             <div class="flex-1">
-              <label class="cursor-pointer bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg text-sm inline-flex items-center gap-2 transition-colors shadow-sm">
+              <label class="inline-flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 transition-colors bg-white border border-neutral-300 rounded-lg shadow-sm cursor-pointer dark:bg-neutral-800 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 dark:text-neutral-300">
                 <Upload :size="16" />
                 Upload Image
                 <input type="file" class="hidden" accept="image/*" @change="handleImageUpload" />
               </label>
-              <p class="text-xs text-slate-500 mt-2">Upload a reference image to remember the style, composition, or lighting you are aiming for with this combination.</p>
+              <p class="mt-2 text-xs text-neutral-500">Upload a reference image to remember the style, composition, or lighting you are aiming for with this combination.</p>
             </div>
           </div>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Trigger Words (Combined)</label>
+          <label class="block mb-1 text-sm font-medium text-neutral-600 dark:text-neutral-400">Trigger Words (Combined)</label>
           <input 
             type="text" 
             v-model="triggerWords"
-            class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-2 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-indigo-500 placeholder-slate-400 dark:placeholder-slate-600 transition-colors"
+            class="w-full px-4 py-2 text-neutral-900 placeholder-neutral-400 transition-colors border border-neutral-200 rounded-lg bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-100 focus:outline-none focus:border-blue-500 dark:placeholder-neutral-600"
             placeholder="e.g. detailed, 8k, masterpiece (comma separated)"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-indigo-600 dark:text-indigo-400 mb-2">1. Select Checkpoint (Base)</label>
+          <label class="block mb-2 text-sm font-medium text-blue-600 dark:text-blue-400">1. Select Checkpoint (Base)</label>
           <select 
             v-model="selectedCheckpoint"
-            class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors"
+            class="w-full px-4 py-3 text-neutral-900 transition-colors border border-neutral-200 rounded-lg bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-100 focus:outline-none focus:border-blue-500"
           >
             <option value="">-- Select Checkpoint --</option>
             <option v-for="cp in checkpoints" :key="cp.id" :value="cp.id">{{ cp.name }} ({{ cp.version }})</option>
@@ -152,8 +152,8 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-pink-600 dark:text-pink-400 mb-2">2. Add LoRAs (Optional)</label>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-48 overflow-y-auto p-2 bg-slate-50 dark:bg-slate-950/50 rounded-lg border border-slate-200 dark:border-slate-800">
+          <label class="block mb-2 text-sm font-medium text-pink-600 dark:text-pink-400">2. Add LoRAs (Optional)</label>
+          <div class="grid grid-cols-1 gap-2 p-2 overflow-y-auto border border-neutral-200 rounded-lg md:grid-cols-2 max-h-48 bg-neutral-50 dark:bg-neutral-950/50 dark:border-neutral-800">
             <div 
               v-for="lora in loras"
               :key="lora.id"
@@ -161,11 +161,11 @@
               :class="[
                 'flex items-center justify-between p-2 rounded cursor-pointer transition-colors',
                 selectedLoras.includes(lora.id) 
-                  ? 'bg-indigo-100 dark:bg-indigo-900/30 border border-indigo-500/50' 
-                  : 'hover:bg-slate-100 dark:hover:bg-slate-800 border border-transparent'
+                  ? 'bg-blue-100 dark:bg-blue-900/30 border border-blue-500/50' 
+                  : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 border border-transparent'
               ]"
             >
-              <span :class="['text-sm truncate', selectedLoras.includes(lora.id) ? 'text-indigo-900 dark:text-indigo-200' : 'text-slate-700 dark:text-slate-300']">{{ lora.name }}</span>
+              <span :class="['text-sm truncate', selectedLoras.includes(lora.id) ? 'text-blue-900 dark:text-blue-200' : 'text-neutral-700 dark:text-neutral-300']">{{ lora.name }}</span>
               <div v-if="selectedLoras.includes(lora.id)" class="flex items-center gap-2" @click.stop>
                 <input 
                   type="number" 
@@ -174,41 +174,41 @@
                   max="2"
                   :value="loraWeights[lora.id] || 0"
                   @input="handleLoraWeightChange(lora.id, ($event.target as HTMLInputElement).value)"
-                  class="w-16 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded px-1 py-0.5 text-xs text-right text-slate-900 dark:text-white"
+                  class="w-16 bg-white dark:bg-neutral-950 border border-neutral-300 dark:border-neutral-700 rounded px-1 py-0.5 text-xs text-right text-neutral-900 dark:text-white"
                 />
               </div>
             </div>
-            <div v-if="!loras.length" class="text-slate-500 text-sm p-2">No LoRAs available.</div>
+            <div v-if="!loras.length" class="p-2 text-sm text-neutral-500">No LoRAs available.</div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div class="space-y-4">
             <div>
-              <label class="block text-sm font-medium text-emerald-600 dark:text-emerald-400 mb-2">3. Additional Models (Optional)</label>
+              <label class="block mb-2 text-sm font-medium text-emerald-600 dark:text-emerald-400">3. Additional Models (Optional)</label>
               
-              <label class="block text-xs font-bold text-slate-500 uppercase mb-1 mt-2">VAE</label>
+              <label class="block mt-2 mb-1 text-xs font-bold text-neutral-500 uppercase">VAE</label>
               <select 
                 v-model="selectedVae"
-                class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+                class="w-full px-3 py-2 text-sm text-neutral-900 transition-colors border border-neutral-200 rounded-lg bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-100 focus:outline-none focus:border-blue-500"
               >
                 <option value="">-- Default / None --</option>
                 <option v-for="vae in vaes" :key="vae.id" :value="vae.id">{{ vae.name }}</option>
               </select>
 
-              <label class="block text-xs font-bold text-slate-500 uppercase mb-1 mt-3">CLIP</label>
+              <label class="block mt-3 mb-1 text-xs font-bold text-neutral-500 uppercase">CLIP</label>
               <select 
                 v-model="selectedClip"
-                class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+                class="w-full px-3 py-2 text-sm text-neutral-900 transition-colors border border-neutral-200 rounded-lg bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-100 focus:outline-none focus:border-blue-500"
               >
                 <option value="">-- Default / None --</option>
                 <option v-for="clip in clips" :key="clip.id" :value="clip.id">{{ clip.name }}</option>
               </select>
 
-              <label class="block text-xs font-bold text-slate-500 uppercase mb-1 mt-3">Text Encoder</label>
+              <label class="block mt-3 mb-1 text-xs font-bold text-neutral-500 uppercase">Text Encoder</label>
               <select 
                 v-model="selectedTextEncoder"
-                class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+                class="w-full px-3 py-2 text-sm text-neutral-900 transition-colors border border-neutral-200 rounded-lg bg-neutral-50 dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-100 focus:outline-none focus:border-blue-500"
               >
                 <option value="">-- Default / None --</option>
                 <option v-for="te in textEncoders" :key="te.id" :value="te.id">{{ te.name }}</option>
@@ -216,32 +216,32 @@
             </div>
           </div>
           
-          <div class="bg-slate-50 dark:bg-slate-950/50 p-4 rounded-lg border border-slate-200 dark:border-slate-800 h-fit">
-            <div class="flex items-center gap-2 mb-3 text-slate-700 dark:text-slate-300 font-medium text-sm">
+          <div class="p-4 border border-neutral-200 rounded-lg bg-neutral-50 dark:bg-neutral-950/50 dark:border-neutral-800 h-fit">
+            <div class="flex items-center gap-2 mb-3 text-sm font-medium text-neutral-700 dark:text-neutral-300">
               <Settings2 :size="16" /> Generation Settings
             </div>
             <div class="grid grid-cols-2 gap-3">
               <div>
-                <label class="block text-xs text-slate-500 mb-1">Steps</label>
+                <label class="block mb-1 text-xs text-neutral-500">Steps</label>
                 <input 
                   type="number" 
                   v-model="steps"
-                  class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1.5 text-sm text-slate-900 dark:text-slate-200"
+                  class="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded px-2 py-1.5 text-sm text-neutral-900 dark:text-neutral-200"
                 />
               </div>
               <div>
-                <label class="block text-xs text-slate-500 mb-1">CFG Scale</label>
+                <label class="block mb-1 text-xs text-neutral-500">CFG Scale</label>
                 <input 
                   type="number" step="0.5"
                   v-model="cfgScale"
-                  class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1.5 text-sm text-slate-900 dark:text-slate-200"
+                  class="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded px-2 py-1.5 text-sm text-neutral-900 dark:text-neutral-200"
                 />
               </div>
               <div class="col-span-2">
-                <label class="block text-xs text-slate-500 mb-1">Sampler</label>
+                <label class="block mb-1 text-xs text-neutral-500">Sampler</label>
                 <select 
                   v-model="sampler"
-                  class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1.5 text-sm text-slate-900 dark:text-slate-200"
+                  class="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded px-2 py-1.5 text-sm text-neutral-900 dark:text-neutral-200"
                 >
                   <option>Euler a</option>
                   <option>DPM++ 2M Karras</option>
@@ -260,7 +260,7 @@
             'w-full text-white font-semibold py-3 rounded-lg transition-all shadow-lg flex items-center justify-center gap-2 mt-4',
             editingId 
               ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/30 dark:shadow-emerald-900/50' 
-              : 'bg-indigo-600 hover:bg-indigo-500 shadow-indigo-600/30 dark:shadow-indigo-900/50 disabled:opacity-50 disabled:cursor-not-allowed'
+              : 'bg-blue-600 hover:bg-blue-500 shadow-blue-600/30 dark:shadow-blue-900/50 disabled:opacity-50 disabled:cursor-not-allowed'
           ]"
         >
           <Save v-if="editingId" :size="20" />
