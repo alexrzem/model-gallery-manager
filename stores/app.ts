@@ -1,166 +1,178 @@
+import _ from 'lodash';
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
-import type { AppState, Model, Combination, User } from '@/types';
+import { type AppState, type Model, type ModelType, type Combination, type User, MODEL_TYPES } from '@/types';
 import { loadAppState, saveModel, deleteModel as deleteModelFromDb, saveCombination, deleteCombination, saveModels } from '@/stores/storage';
 
-export const useAppStore = defineStore('app', () => {
-    const models = ref<Model[]>([]);
-    const combinations = ref<Combination[]>([]);
-    const loading = ref(true);
-    const selectedModel = ref<Model | null>(null);
-    const searchQuery = ref('');
-    const selectedTags = ref<string[]>([]);
-    const isDarkMode = ref(true);
-    const user = ref<User | null>(null);
-
-    // Computed
-    const allTags = computed(() => {
-        const tags = new Set<string>();
-        models.value.forEach((m) => m.tags?.forEach((t) => tags.add(t)));
-        return Array.from(tags).sort();
-    });
-
-    // Actions
-    async function initialize() {
-        try {
-            const appState = await loadAppState();
-            models.value = appState.models;
-            combinations.value = appState.combinations;
-        } catch (e) {
-            console.error('Failed to load IndexedDB', e);
-        } finally {
-            loading.value = false;
-        }
-
-        // Theme initialization
-        const savedTheme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
-
-        isDarkMode.value = shouldBeDark;
-        if (shouldBeDark) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-
-        // Auth initialization
-        const storedUser = localStorage.getItem('user_session');
-        if (storedUser) {
-            try {
-                user.value = JSON.parse(storedUser);
-            } catch (e) {
-                localStorage.removeItem('user_session');
-            }
-        }
-    }
-
-    function toggleTheme() {
-        isDarkMode.value = !isDarkMode.value;
-        if (isDarkMode.value) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-        localStorage.setItem('theme', isDarkMode.value ? 'dark' : 'light');
-    }
-
-    function setUser(newUser: User | null) {
-        user.value = newUser;
-        if (newUser) {
-            localStorage.setItem('user_session', JSON.stringify(newUser));
-        } else {
-            localStorage.removeItem('user_session');
-        }
-    }
-
-    async function updateModel(updatedModel: Model) {
-        const index = models.value.findIndex((m) => m.id === updatedModel.id);
-        if (index !== -1) {
-            models.value[index] = updatedModel;
-        }
-        selectedModel.value = updatedModel;
-
-        try {
-            await saveModel(updatedModel);
-        } catch (e) {
-            console.error('Failed to save model', e);
-        }
-    }
-
-    async function deleteModel(modelId: string) {
-        if (confirm('Are you sure you want to delete this model? This action cannot be undone.')) {
-            models.value = models.value.filter((m) => m.id !== modelId);
-
-            if (selectedModel.value?.id === modelId) {
-                selectedModel.value = null;
-            }
-
-            await deleteModelFromDb(modelId);
-        }
-    }
-
-    async function addModel(model: Model) {
-        models.value = [model, ...models.value];
-        selectedModel.value = model;
-        await saveModel(model);
-    }
-
-    async function importModels(importedModels: Model[]) {
-        models.value = [...models.value, ...importedModels];
-        await saveModels(importedModels);
-    }
-
-    async function updateCombination(combo: Combination) {
-        const exists = combinations.value.some((c) => c.id === combo.id);
-
-        if (exists) {
-            const index = combinations.value.findIndex((c) => c.id === combo.id);
-            if (index !== -1) {
-                combinations.value[index] = combo;
-            }
-        } else {
-            combinations.value = [...combinations.value, combo];
-        }
-
-        await saveCombination(combo);
-    }
-
-    async function removeCombination(id: string) {
-        combinations.value = combinations.value.filter((c) => c.id !== id);
-        await deleteCombination(id);
-    }
-
-    function toggleTag(tag: string) {
-        if (selectedTags.value.includes(tag)) {
-            selectedTags.value = selectedTags.value.filter((t) => t !== tag);
-        } else {
-            selectedTags.value = [...selectedTags.value, tag];
-        }
-    }
-
+export const useAppStore = defineStore('app', {
+  state: (): AppState => {
     return {
-        // State
-        models,
-        combinations,
-        loading,
-        selectedModel,
-        searchQuery,
-        selectedTags,
-        isDarkMode,
-        user,
-        // Computed
-        allTags,
-        // Actions
-        initialize,
-        toggleTheme,
-        setUser,
-        updateModel,
-        deleteModel,
-        addModel,
-        importModels,
-        updateCombination,
-        removeCombination,
-        toggleTag,
+      models: [] as Model[],
+      combinations: [] as Combination[],
+      loading: true,
+      selectedModel: null as Model,
+      searchQuery: '',
+      selectedTags: [] as string[],
+      isDarkMode: true,
+      user: null as User,
     };
+  },
+
+  getters: {
+    allTags: (state) => {
+      const tags = new Set<string>();
+      state.models.forEach((m) => m.tags?.forEach((t) => tags.add(t)));
+      return Array.from(tags).sort();
+    },
+
+    checkpoints: (state): Model[] => {
+      return _.filter(state.models, { type: 'Checkpoint' });
+    },
+    clips: (state): Model[] => {
+      return _.filter(state.models, { type: 'CLIP' });
+    },
+    clipembeds: (state): Model[] => {
+      return _.filter(state.models, { type: 'CLIPEmbed' });
+    },
+    clipvisions: (state): Model[] => {
+      return _.filter(state.models, { type: 'CLIPVision' });
+    },
+    controlnets: (state): Model[] => {
+      return _.filter(state.models, { type: 'ControlNet' });
+    },
+    embeddings: (state): Model[] => {
+      return _.filter(state.models, { type: 'Embedding' });
+    },
+    ipadapters: (state): Model[] => {
+      return _.filter(state.models, { type: 'IPAdapter' });
+    },
+    loras: (state): Model[] => {
+      return _.filter(state.models, { type: 'Checkpoint' });
+    },
+    textencoders: (state): Model[] => {
+      return _.filter(state.models, { type: 'TextEncoder' });
+    },
+    vaes: (state): Model[] => {
+      return _.filter(state.models, { type: 'VAE' });
+    },
+  },
+
+  actions: {
+    async initialize() {
+      try {
+        const appState = await loadAppState();
+        this.models = appState.models;
+        this.combinations = appState.combinations;
+      } catch (e) {
+        console.error('Failed to load IndexedDB', e);
+      } finally {
+        this.loading = false;
+      }
+
+      // Theme initialization
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+
+      this.isDarkMode = shouldBeDark;
+      if (shouldBeDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+
+      // Auth initialization
+      const storedUser = localStorage.getItem('user_session');
+      if (storedUser) {
+        try {
+          this.user = JSON.parse(storedUser);
+        } catch (e) {
+          localStorage.removeItem('user_session');
+        }
+      }
+    },
+
+    toggleTheme() {
+      this.isDarkMode = !this.isDarkMode;
+      if (this.isDarkMode) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
+    },
+
+    setUser(newUser: User | null) {
+      this.user = newUser;
+      if (newUser) {
+        localStorage.setItem('user_session', JSON.stringify(newUser));
+      } else {
+        localStorage.removeItem('user_session');
+      }
+    },
+
+    async updateModel(updatedModel: Model) {
+      const index = this.models.findIndex((m) => m.id === updatedModel.id);
+      if (index !== -1) {
+        this.models[index] = updatedModel;
+      }
+      this.selectedModel = updatedModel;
+
+      try {
+        await saveModel(updatedModel);
+      } catch (e) {
+        console.error('Failed to save model', e);
+      }
+    },
+
+    async deleteModel(modelId: string) {
+      if (confirm('Are you sure you want to delete this model? This action cannot be undone.')) {
+        this.models = this.models.filter((m) => m.id !== modelId);
+
+        if (this.selectedModel?.id === modelId) {
+          this.selectedModel = null;
+        }
+
+        await deleteModelFromDb(modelId);
+      }
+    },
+
+    async addModel(model: Model) {
+      this.models = [model, ...this.models];
+      this.selectedModel = model;
+      await saveModel(model);
+    },
+
+    async importModels(importedModels: Model[]) {
+      this.models = [...this.models, ...importedModels];
+      await saveModels(importedModels);
+    },
+
+    async updateCombination(combo: Combination) {
+      const exists = this.combinations.some((c) => c.id === combo.id);
+
+      if (exists) {
+        const index = this.combinations.findIndex((c) => c.id === combo.id);
+        if (index !== -1) {
+          this.combinations[index] = combo;
+        }
+      } else {
+        this.combinations = [...this.combinations, combo];
+      }
+
+      await saveCombination(combo);
+    },
+
+    async removeCombination(id: string) {
+      this.combinations = this.combinations.filter((c) => c.id !== id);
+      await deleteCombination(id);
+    },
+
+    toggleTag(tag: string) {
+      if (this.selectedTags.includes(tag)) {
+        this.selectedTags = this.selectedTags.filter((t) => t !== tag);
+      } else {
+        this.selectedTags = [...this.selectedTags, tag];
+      }
+    },
+  },
 });

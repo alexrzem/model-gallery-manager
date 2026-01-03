@@ -12,16 +12,17 @@ const pinia = createPinia();
 app.use(pinia);
 app.use(router);
 app.use(PrimeVue, {
-    theme: {
-        preset: Aura,
-        options: {
-            darkModeSelector: '.dark',
-            cssLayer: {
+  theme: {
+    preset: Aura,
+    options: {
+      prefix: 'p',
+      darkModeSelector: '.dark',
+      cssLayer: {
                 name: 'primevue',
-                order: 'tailwind-base, primevue, tailwind-utilities',
-            },
-        },
+                order: 'theme, base, primevue'
+            }
     },
+  },
 });
 
 app.mount('#app');
