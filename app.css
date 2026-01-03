@@ -45,3 +45,7 @@ html {
 .dark ::-webkit-scrollbar-thumb:hover {
   background: theme('colors.neutral.500');
 }
+
+.p-splitbutton .p-button .p-button-label {
+  @apply pl-4;
+}

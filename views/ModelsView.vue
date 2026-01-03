@@ -2,7 +2,7 @@
     <LoadingView v-if="appStore.loading" />
     <ModelList
         v-else
-        :activeTab="route.name as string"
+        :activeTab="String(route.name ?? '')"
         :models="appStore.models"
         v-model:searchQuery="appStore.searchQuery"
         :selectedTags="appStore.selectedTags"
