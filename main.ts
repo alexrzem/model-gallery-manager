@@ -18,9 +18,9 @@ app.use(PrimeVue, {
       prefix: 'p',
       darkModeSelector: '.dark',
       cssLayer: {
-                name: 'primevue',
-                order: 'theme, base, primevue'
-            }
+        name: 'primevue',
+        order: 'theme, base, primevue',
+      },
     },
   },
 });

@@ -5,13 +5,13 @@
     >
       <!-- Header -->
       <div
-        class="flex items-center justify-center flex-shrink-0 h-20 mb-2 overflow-hidden transition-all duration-300 border-b border-neutral-200 group-hover:justify-start group-hover:px-6 dark:border-neutral-800/50"
+        class="flex items-center justify-center h-20 mb-2 overflow-hidden transition-all duration-300 border-b shrink-0 border-neutral-200 group-hover:justify-start group-hover:px-6 dark:border-neutral-800/50"
       >
-        <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white bg-blue-600 rounded-lg shadow-lg shadow-blue-600/20 dark:shadow-blue-900/20">
+        <div class="flex items-center justify-center w-12 h-12 text-white bg-blue-600 rounded-lg shadow-lg shrink-0 shadow-blue-600/20 dark:shadow-blue-900/20">
           <Sparkles :size="20" />
         </div>
         <div class="w-0 ml-0 overflow-hidden transition-all duration-300 opacity-0 group-hover:ml-3 group-hover:w-auto group-hover:opacity-100 whitespace-nowrap">
-          <h1 class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">NeuroGallery</h1>
+          <h1 class="text-xl font-bold text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400">NeuroGallery</h1>
         </div>
       </div>
 
@@ -26,10 +26,10 @@
             'w-full flex items-center h-12 rounded-lg transition-all duration-200 relative whitespace-nowrap justify-center group-hover:justify-start group-hover:px-4',
             isActiveRoute(item.path)
               ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 dark:shadow-blue-900/30'
-              : 'text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-200',
+              : 'bg-surface-200 border-surface-300 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-200',
           ]"
         >
-          <div class="flex-shrink-0">
+          <div class="shrink-0">
             <component :is="item.icon" :size="20" />
           </div>
 

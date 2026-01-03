@@ -4,7 +4,7 @@
     <div class="flex items-center justify-between">
       <h2 class="text-2xl font-bold capitalize text-slate-900 dark:text-white">{{ activeTab }}</h2>
       <div class="flex gap-2">
-        <SplitButton label="Save" @click="handleAddModel" :model="items" raised severity="info" />
+        <SplitButton :label="addButtonLabel" @click="handleAddModel" :model="items" raised size="small"/>
         <div v-if="activeTab === 'others'" class="flex gap-0 rounded-lg shadow-sm">
           <Select
             class="py-2 pl-3 pr-8 text-sm font-medium text-white transition-colors bg-blue-600 border-r border-blue-400 rounded-l-lg outline-none appearance-none cursor-pointer hover:bg-blue-500"
@@ -101,7 +101,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import Button from 'primevue/button';
 import Select from 'primevue/select';
 import InputText from 'primevue/inputtext';
@@ -137,6 +137,8 @@ const tabLabel = computed(() => props.activeTab.substring(0, props.activeTab.len
 //             <option value="Embedding">Embedding</option>
 //             <option value="IPAdapter">IP Adapter</option>
 //             <option value="TextEncoder">Text Encoder</option>
+
+const addButtonLabel = computed(() => 'Add ' + props.activeTab.substring(0, props.activeTab.length - 1));
 
 const items = [
   {
